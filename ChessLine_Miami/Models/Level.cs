@@ -6,6 +6,7 @@ namespace ChessLine_Miami.Models;
 public class Level
 {
     public readonly string Name;
+    public readonly string[] Maplines;
     public readonly Size Size;
     
     public readonly HashSet<Point> Walls;
@@ -17,10 +18,11 @@ public class Level
     public List<Enemy> Enemies;
     public SectorType[,] Field;
 
-    public Level(string name, Size size, HashSet<Point> walls, HashSet<Point> lava, Player player, List<Enemy> enemies)
-    { 
-        Name = name;
+    public Level(string name, Size size, HashSet<Point> walls, HashSet<Point> lava, Player player, List<Enemy> enemies, String[] maplines)
+    {
         
+        Name = name;
+        Maplines = maplines;
         Size = size;
         
         Walls = walls;
@@ -46,7 +48,7 @@ public class Level
                 Field[x, y] = SectorType.Empty;
             }
         }
-        Field[Player.Pos.X, Player.Pos.Y] = SectorType.Player;
+        //Field[Player.Pos.X, Player.Pos.Y] = SectorType.Player;
         foreach (var wall in Walls)
         {
             Field[wall.X, wall.Y] = SectorType.Wall;
@@ -56,10 +58,10 @@ public class Level
             Field[l.X, l.Y] = SectorType.Lava;
         }
         
-        foreach (var enemy in Enemies)
-        {
-            Field[enemy.Pos.X, enemy.Pos.Y] = SectorType.Enemy;
-        }
+        // foreach (var enemy in Enemies)
+        // {
+        //     Field[enemy.Pos.X, enemy.Pos.Y] = SectorType.Enemy;
+        // }
         
     }
 

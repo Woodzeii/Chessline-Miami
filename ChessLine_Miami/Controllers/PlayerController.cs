@@ -9,14 +9,7 @@ public class PlayerController
     {
         if (e.KeyCode == key)
         {
-            var newPos = new Point(level.Player.Pos.X+deltaX, level.Player.Pos.Y+deltaY);
-            if (CollisionDetector.CanMoveTo(newPos, level))
-            {
-             if (CollisionDetector.IsDeadlyForPlayer(newPos,level)) Controllers.LevelRestart();
-             else LevelController.MoveTo(SectorType.Player, level.Player.Pos,newPos,level);
-            }
-
-
+            level.Player.TryMove(deltaX, deltaY,level);
         }
     }
 }

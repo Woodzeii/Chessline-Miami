@@ -13,8 +13,8 @@ public class PathFinder
         //Алгоритм Брезенхема
         int x0 = enemy.Pos.X;
         int y0 = enemy.Pos.Y;
-        int x1 = player.Pos.X;
-        int y1 = player.Pos.Y;
+        int x1 = player.FieldPos.X;
+        int y1 = player.FieldPos.Y;
 
         int dx = Math.Abs(x1 - x0);
         int dy = Math.Abs(y1 - y0);

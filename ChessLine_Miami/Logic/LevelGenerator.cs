@@ -42,7 +42,7 @@ public class LevelGenerator
             }
         }
 
-        return new Level("New Level", room, walls, lava, player, enemies);
+        return new Level("New Level", room, walls, lava, player, enemies, mapLines);
     }
 
     public SectorType[,] CreateField(Level level)
