@@ -44,4 +44,34 @@ public class LevelGenerator
 
         return new Level("New Level", room, walls, lava, player, enemies);
     }
+
+    public SectorType[,] CreateField(Level level)
+    {
+        var height = level.Size.Height;
+        var width = level.Size.Width;
+        
+        SectorType[,] field = new SectorType[width, height];
+
+        // Сначала заполняем всё пустотой
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+                field[x, y] = SectorType.Empty;
+        }
+        
+
+        
+
+        // Расставляем стены
+        foreach (var wall in level.Walls)
+            if (wall.X < width && wall.Y < height) 
+                field[wall.X, wall.Y] = SectorType.Wall;
+
+        // Расставляем лаву
+        foreach (var l in level.Lava)
+            if (l.X < width && l.Y < height) 
+                field[l.X, l.Y] = SectorType.Lava;
+
+        return field;
+    }
 }

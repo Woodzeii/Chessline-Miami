@@ -6,5 +6,5 @@ public enum SectorType
     Lava,
     Enemy,
     Player,
-    Clear
+    Empty
 }
