@@ -4,9 +4,7 @@ namespace ChessLine_Miami.Logic;
 
 public class PathFinder
 {
-    public void FindPath()
-    {
-    }
+   
 
     public bool IsPlayerSeen(Player player, Enemy enemy, Level level)
     {

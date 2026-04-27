@@ -28,4 +28,18 @@ public class Game
             .Select(e=>new Enemy(e.Pos, e.Type))
             .ToList();
     }
+    
+    public void Pause()
+    {
+        IsPaused = true;
+    }
+    public void Resume()
+    {
+        IsPaused = false;
+    }
+    public void TogglePause()
+    {
+        IsPaused = !IsPaused;
+    }
+    
 }

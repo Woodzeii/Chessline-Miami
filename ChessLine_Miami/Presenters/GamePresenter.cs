@@ -13,21 +13,8 @@ public class GamePresenter
 
     public void StartNewGame()
     {
-        // Инициализация новой игры
+        _game.Restart();
     }
 
-    public void PauseGame()
-    {
-        _game.IsPaused = true;
-    }
-
-    public void ResumeGame()
-    {
-        _game.IsPaused = false;
-    }
-
-    public void EndGame()
-    {
-        // Завершение игры
-    }
+    
 }
