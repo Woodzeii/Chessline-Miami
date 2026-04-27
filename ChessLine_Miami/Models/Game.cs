@@ -1,6 +1,31 @@
-﻿namespace ChessLine_Miami.Models;
+﻿using System.Drawing;
+
+namespace ChessLine_Miami.Models;
 
 public class Game
 {
-    //todo сделать класс игры
+    public Level Level { get; set; }
+    public Player Player { get; set; }
+    public List<Enemy> Enemies { get; set; }
+    public bool IsPaused { get; set; }
+    public int Score { get; set; }
+
+    public Game(Level level)
+    {
+        Level = level;
+        Player = new Player(level.PlayerSpawn);
+        Enemies = level.EnemySpawns
+            .Select(e=>new Enemy(e.Pos, e.Type))
+            .ToList();
+        IsPaused = false;
+        Score = 0;
+    }
+
+    public void Restart()
+    {
+        Player = new Player(Level.PlayerSpawn);
+        Enemies = Level.EnemySpawns
+            .Select(e=>new Enemy(e.Pos, e.Type))
+            .ToList();
+    }
 }

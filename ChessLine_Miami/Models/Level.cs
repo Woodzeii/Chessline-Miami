@@ -13,12 +13,14 @@ public class Level
     
     public readonly HashSet<Point> Lava;
     
-    public Player Player;
-    
-    public List<Enemy> Enemies;
+    // Точки спавна (статические данные уровня)
+    public readonly Point PlayerSpawn;
+    public readonly List<Enemy> EnemySpawns;
+
+    // Статическое поле (стены и лава) - не содержит динамических объектов
     public SectorType[,] Field;
 
-    public Level(string name, Size size, HashSet<Point> walls, HashSet<Point> lava, Player player, List<Enemy> enemies, String[] maplines)
+    public Level(string name, Size size, HashSet<Point> walls, HashSet<Point> lava, Point playerSpawn, List<Enemy> enemySpawns, String[] maplines)
     {
         
         Name = name;
@@ -29,9 +31,8 @@ public class Level
         
         Lava = lava;
         
-        Player = player;
-        
-        Enemies = enemies;
+        PlayerSpawn = playerSpawn;
+        EnemySpawns = enemySpawns;
         
         Field = new SectorType[size.Width, size.Height];
         

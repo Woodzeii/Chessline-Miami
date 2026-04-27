@@ -1,6 +1,6 @@
 ﻿namespace ChessLine_Miami.Logic;
 using Models;
-using Controllers;
+using Presenters;
 
 public class CollisionDetector
 {
@@ -8,7 +8,7 @@ public class CollisionDetector
     {
         var x = newPos.X;
         var y = newPos.Y;
-        if (x >= 0 || y >= 0 || x < level.Size.Width || y < level.Size.Height) return false;
+        if (x < 0 || y < 0 || x >= level.Size.Width || y >= level.Size.Height) return false;
         if (level.Field[x,y]==SectorType.Wall) return  false;
         return true;
     }

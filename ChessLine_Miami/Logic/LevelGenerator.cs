@@ -8,7 +8,7 @@ public class LevelGenerator
         var walls = new HashSet<Point>();
         var lava = new HashSet<Point>();
         var enemies = new List<Enemy>();
-        Player player = null;
+        Point player = new Point(-1, -1); // Инициализируем, чтобы избежать ошибки компиляции
 
         int height = mapLines.Length;
         int width = mapLines[0].Length;
@@ -30,7 +30,7 @@ public class LevelGenerator
                         lava.Add(pos);
                         break;
                     case 'I': // Player 
-                        player = new Player(pos);
+                        player = pos;
                         break;
                     // Враги
                     case 'P': enemies.Add(new Enemy(pos, EnemyType.Pawn)); break;
