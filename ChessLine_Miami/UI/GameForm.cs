@@ -4,7 +4,7 @@ using System;
 using System.Windows.Forms;
 namespace ChessLine_Miami.UI;
 class _constants{
-    public const int CellSize = 40;
+    public const int CellSize = 100;
 }
 
 public partial class GameForm : Form, IGameView

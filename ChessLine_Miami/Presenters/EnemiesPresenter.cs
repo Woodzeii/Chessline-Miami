@@ -49,11 +49,12 @@ public class EnemiesPresenter
                 // Если видит игрока - выбираем ближайший ход
                 move = GetNearestMove(enemy, moves);
             }
-            else
-            {
-                // Случайное движение (блуждание)
-                move = moves[_random.Next(moves.Count)];
-            }
+            //else
+            //{
+                //// Случайное движение (блуждание)
+                //move = moves[_random.Next(moves.Count)];
+            //}
+            else move = Point.Empty;
             
             enemy.TryMove(move.X, move.Y, _game);
             System.Diagnostics.Debug.WriteLine($"Enemy moved to ({enemy.Pos.X},{enemy.Pos.Y})");

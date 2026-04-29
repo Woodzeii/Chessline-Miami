@@ -1,12 +1,14 @@
+using System.IO;
 using ChessLine_Miami.Models;
 using ChessLine_Miami.Presenters;
 namespace ChessLine_Miami.UI;
 public class LevelViewer
 {
-    private const int CellSize = 40;
+    private int CellSize = _constants.CellSize;
     
     public void DrawLevel(Graphics g, Level level, Point cameraOffset)
     {
+        Image lavaImg = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/Lava.jpg"));; 
         for (int x = 0; x < level.Size.Width; x++)
         {
             for (int y = 0; y < level.Size.Height; y++)
@@ -19,13 +21,15 @@ public class LevelViewer
                 );
                 
                 var sector = level.GetSector(x, y);
+                
                 switch (sector)
                 {
                     case SectorType.Wall:
                         g.FillRectangle(Brushes.Gray, cellRect);
                         break;
                     case SectorType.Lava:
-                        g.FillRectangle(Brushes.OrangeRed, cellRect);
+                        
+                        g.DrawImage(lavaImg, cellRect);;
                         break;
                     default:
                         g.FillRectangle(Brushes.LightGray, cellRect);
@@ -34,6 +38,4 @@ public class LevelViewer
             }
         }
     }
-    
-    public static int GetCellSize() => CellSize;
 }

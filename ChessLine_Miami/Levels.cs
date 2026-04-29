@@ -6,5 +6,5 @@ public class Levels
         "WWWWWWWWWWWWWW\nW......R.....W\nW..P....K....W\nW............W\nW.....I......W\nW..LLLLLL....W\nW.......R....W\nWWWWWWWWWWWWWW\n";
 
     public static string level2 = 
-        "WWWWWWWWWWWWWWWWWWW\nW....R.....R...WWWW\nW..P....K.......WWWW\nW............B..WWWW\nW.....I..........WWWW\nW..LLLLLL....L..WWWW\nW.......R....L..WWWW\nWWWWWWWWWWWWWWWWWWW\n";
+        "WWWWWWWWWWWWWWWWWWW\nW....R.....R...WWWW\nW..P....K.......WWWW\nW....W.W.....B..WWWW\nW....WIW.........WWWW\nW..LWWWLL....L..WWWW\nW.......R....L..WWWW\nWWWWWWWWWWWWWWWWWWW\n";
 }

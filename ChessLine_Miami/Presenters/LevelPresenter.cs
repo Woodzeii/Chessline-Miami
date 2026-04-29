@@ -22,14 +22,7 @@ public class LevelPresenter
         game.Restart();
     }
 
-    public bool IsPlayerAlive(Player player, List<Enemy> enemies, SectorType[,] field)
-    {
-        if (field[player.FieldPos.X, player.FieldPos.Y] == SectorType.Lava)
-            return false;
-        if (CollisionDetector.CheckCollision(player, enemies))
-            return false;
-        return true;
-    }
+    
 
     public bool AreEnemiesDead(List<Enemy> enemies, SectorType[,] field)
     {

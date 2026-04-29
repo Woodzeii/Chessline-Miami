@@ -3,6 +3,7 @@ using ChessLine_Miami.UI;
 using ChessLine_Miami.Logic;
 using System;
 using System.Windows.Forms;
+using System.Runtime.CompilerServices;
 namespace ChessLine_Miami.Presenters;
 
 public class GamePresenter
@@ -32,7 +33,14 @@ public class GamePresenter
 
     public async Task OnKeyDown(KeyEventArgs e)
     {
+        _game.Player.IsAlive = IsPlayerAlive(_game.Player, _game.Enemies, _game.Level.Field);
         var moved = _playerPresenter.WASD(e);
+        if (!_game.Player.IsAlive)        {
+            MessageBox.Show("You died! Starting new game.");
+            await Task.Delay(500);
+            StartNewGame();
+            return;
+        }
         if (moved)
         {
             _view.Redraw();
@@ -44,9 +52,18 @@ public class GamePresenter
         }
     }
 
+    public bool IsPlayerAlive(Player player, List<Enemy> enemies, SectorType[,] field)
+    {
+        if (field[player.FieldPos.X, player.FieldPos.Y] == SectorType.Lava)
+            return false;
+        if (CollisionDetector.CheckCollision(player, enemies))
+            return false;
+        return true;
+    }
+
     public Point GetCameraOffset(Size screenSize)
     {
-        var cellSize = 40;
+        var cellSize = _constants.CellSize;
         var playerPixelPos = new Point(Player.FieldPos.X * cellSize, Player.FieldPos.Y * cellSize);
         var offsetX = screenSize.Width / 2 - playerPixelPos.X - cellSize / 2;
         var offsetY = screenSize.Height / 2 - playerPixelPos.Y - cellSize / 2;

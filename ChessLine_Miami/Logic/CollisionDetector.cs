@@ -4,12 +4,13 @@ using Presenters;
 
 public class CollisionDetector
 {
-    public static bool CanMoveTo(Point newPos, Level level)
+    public static bool CanMoveTo(Point newPos, Game game)
     {
         var x = newPos.X;
         var y = newPos.Y;
-        if (x < 0 || y < 0 || x >= level.Size.Width || y >= level.Size.Height) return false;
-        if (level.Field[x,y]==SectorType.Wall) return  false;
+        if (x < 0 || y < 0 || x >= game.Level.Size.Width || y >= game.Level.Size.Height) return false;
+        if (game.Level.Field[x,y]==SectorType.Wall) return  false;
+        if (game.Enemies.Select(enemy=>enemy.Pos).Contains(new Point(x,y))) return false;
         return true;
     }
     

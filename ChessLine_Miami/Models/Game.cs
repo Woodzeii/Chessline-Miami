@@ -20,9 +20,7 @@ public class Game
         IsPaused = false;
         Score = 0;
     }
-
-  
-
+    
     public void Restart()
     {
         Player = new Player(Level.PlayerSpawn);
@@ -30,4 +28,6 @@ public class Game
             .Select((enemy) => new Enemy(enemy.Pos, enemy.Type))
             .ToList();
     }
+    
+    
 }

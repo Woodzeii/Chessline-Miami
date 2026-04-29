@@ -15,10 +15,10 @@ public class Player
           IsRushReady = true;
      }
 
-     public void TryMove(int deltaX, int deltaY, Level level)
+     public void TryMove(int deltaX, int deltaY, Game game)
      {
           var newPos = new Point(FieldPos.X + deltaX, FieldPos.Y + deltaY);
-          if (CollisionDetector.CanMoveTo(newPos, level))
+          if (CollisionDetector.CanMoveTo(newPos, game))
           {
                FieldPos = newPos;
           }

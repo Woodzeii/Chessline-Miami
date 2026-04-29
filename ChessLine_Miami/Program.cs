@@ -1,5 +1,6 @@
+using System.IO;
 using System.Media;
-
+using System.Windows.Media;
 using ChessLine_Miami.UI;
 using ChessLine_Miami.Presenters;
 using ChessLine_Miami.Models;
@@ -17,9 +18,13 @@ static class Program
     static void Main()
     {
         ApplicationConfiguration.Initialize();
-        SoundPlayer sp = new SoundPlayer(@"D:\Projects\URFU\Ulearn\ChessLineExtra\Chessline-Miami\ChessLine_Miami\UI\Music\mainTheme.wav");
-        sp.PlayLooping();
         
+        var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Music/Ambient.wav"); 
+        // ^ Даже если расширение .wav, внутри может быть mp3, MediaPlayer это проглотит.
+
+        var mediaPlayer = new MediaPlayer();
+        mediaPlayer.Open(new Uri(musicPath));
+        mediaPlayer.Play();
         // Создаем форму
         var form = new GameForm();
 
