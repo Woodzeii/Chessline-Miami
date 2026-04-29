@@ -2,9 +2,47 @@
 
 public class Levels
 {
-   public static String Level1 =
-        "WWWWWWWWWWWWWW\nW......R.....W\nW..P....K....W\nW............W\nW.....I......W\nW..LLLLLL....W\nW.......R....W\nWWWWWWWWWWWWWW\n";
+     static string level1 = 
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
+"W......................................W\n" +
+"W......................................W\n" +
+"W......................................W\n" +
+"W......................................W\n" +
+"W....I..............W..................W\n" +
+"W...................W..................W\n" +
+"W...................W..................W\n" +
+"W...................W............P.....W\n" +
+"W...................W..................W\n" +
+"W......................................W\n" +
+"W......................................W\n" +
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
-    public static string level2 = 
-        "WWWWWWWWWWWWWWWWWWW\nW....R.....R...WWWW\nW..P....K.......WWWW\nW....W.W.....B..WWWW\nW....WIW.........WWWW\nW..LWWWLL....L..WWWW\nW.......R....L..WWWW\nWWWWWWWWWWWWWWWWWWW\n";
+     public static string level2 = 
+         "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
+         "W...................................LL.W\n" +
+         "W..P..............................P..L.W\n" +
+         "W......................................W\n" +
+         "W..............P..........LLLLLLLLLLLLLW\n" +
+         "W..........WW..WWWWW...................W\n" +
+         "W..........W...I...W...........K.......W\n" +
+         "W..........W.......W...................W\n" +
+         "W..........W.......W...................W\n" +
+         "W..........W.......W.....K.............W\n" +
+         "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
+
+
+    public static string level3 = 
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
+"W......................................W\n" +
+"W......WWWWWWWWWWWWWWWWWWWWWWWWWWW.....W\n" +
+"W......W.......................W.....W\n" +
+"W......W..P..................R.W.....W\n" +
+"W......W.......................W.....W\n" +
+"W......WWWWWWWWWWWWWWWWWWWWWWWWW.....W\n" +
+"W.....................................W\n" +
+"W...........I.........................W\n" +
+"W.............L.......................W\n" +
+"W.....................................W\n" +
+"W.....................................W\n" +
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 }

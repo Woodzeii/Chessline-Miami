@@ -100,13 +100,21 @@ public class EnemiesPresenter
 
     private List<Point> GetPawnMoves(Enemy enemy)
     {
+        var dirs = new List<Point>();
+        dirs.Add(new Point(0, 1));
+        dirs.Add(new Point(1, 0));
+        dirs.Add(new Point(-1, 0));
+        dirs.Add(new Point(0, -1));
+
         // Пешка двигается только вниз (по полю)
         var moves = new List<Point>();
-        var newPos = new Point(enemy.Pos.X, enemy.Pos.Y + 1);
         
-        if (IsValidMove(newPos))
-            moves.Add(new Point(0, 1));
-        
+        foreach (var dir in dirs)
+        {
+            var newPos = new Point(enemy.Pos.X + dir.X, enemy.Pos.Y + dir.Y);
+            if (IsValidMove(newPos))
+                moves.Add(dir);
+        }
         return moves;
     }
 
