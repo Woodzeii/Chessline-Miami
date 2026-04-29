@@ -60,6 +60,6 @@ public partial class GameForm : Form, IGameView
             LevelViewer.DrawLevel(g, _game.Level, CameraOffset);
         
         if (_game?.Player != null)
-            PlayerViewer.DrawPlayer(g, _game.Player);
+            PlayerViewer.DrawPlayer(g, _game.Player, CameraOffset);
     }
 }

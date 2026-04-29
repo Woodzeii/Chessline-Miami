@@ -3,27 +3,37 @@ using ChessLine_Miami.Presenters;
 namespace ChessLine_Miami.UI;
 public class LevelViewer
 {
+    private const int CellSize = 40;
+    
     public void DrawLevel(Graphics g, Level level, Point cameraOffset)
     {
-        var cellSize = 40;
         for (int x = 0; x < level.Size.Width; x++)
         {
             for (int y = 0; y < level.Size.Height; y++)
             {
-                var cellRect = new Rectangle(x * cellSize + cameraOffset.X, y * cellSize + cameraOffset.Y, cellSize, cellSize);
-                if (level.Walls.Any(wall => wall.X == x && wall.Y == y))
+                var cellRect = new Rectangle(
+                    x * CellSize + cameraOffset.X, 
+                    y * CellSize + cameraOffset.Y, 
+                    CellSize, 
+                    CellSize
+                );
+                
+                var sector = level.GetSector(x, y);
+                switch (sector)
                 {
-                    g.FillRectangle(Brushes.Gray, cellRect);
-                }
-                else if (level.Lava.Any(l => l.X == x && l.Y == y))
-                {
-                    g.FillRectangle(Brushes.OrangeRed, cellRect);
-                }
-                else
-                {
-                    g.FillRectangle(Brushes.LightGray, cellRect);
+                    case SectorType.Wall:
+                        g.FillRectangle(Brushes.Gray, cellRect);
+                        break;
+                    case SectorType.Lava:
+                        g.FillRectangle(Brushes.OrangeRed, cellRect);
+                        break;
+                    default:
+                        g.FillRectangle(Brushes.LightGray, cellRect);
+                        break;
                 }
             }
         }
     }
+    
+    public static int GetCellSize() => CellSize;
 }
