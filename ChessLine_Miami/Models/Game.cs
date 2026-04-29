@@ -28,6 +28,4 @@ public class Game
             .Select((enemy) => new Enemy(enemy.Pos, enemy.Type))
             .ToList();
     }
-    
-    
 }

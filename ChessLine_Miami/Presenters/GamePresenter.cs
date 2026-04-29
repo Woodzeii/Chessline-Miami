@@ -33,14 +33,9 @@ public class GamePresenter
 
     public async Task OnKeyDown(KeyEventArgs e)
     {
-        _game.Player.IsAlive = IsPlayerAlive(_game.Player, _game.Enemies, _game.Level.Field);
+        if (await EndIfDead()) return;
         var moved = _playerPresenter.WASD(e);
-        if (!_game.Player.IsAlive)        {
-            MessageBox.Show("You died! Starting new game.");
-            await Task.Delay(500);
-            StartNewGame();
-            return;
-        }
+        
         if (moved)
         {
             _view.Redraw();
@@ -49,7 +44,21 @@ public class GamePresenter
             _enemiesPresenter.UpdateEnemies();
             System.Diagnostics.Debug.WriteLine($"=== Enemies after update: {_game.Enemies.Count} ===");
             _view.Redraw();
+            if (await EndIfDead()) return;
         }
+    }
+
+    private async Task<bool> EndIfDead()
+    {
+        _game.Player.IsAlive = IsPlayerAlive(_game.Player, _game.Enemies, _game.Level.Field);
+        if (!_game.Player.IsAlive)        {
+            MessageBox.Show("You died! Starting new game.");
+            await Task.Delay(500);
+            StartNewGame();
+            return true;
+        }
+
+        return false;
     }
 
     public bool IsPlayerAlive(Player player, List<Enemy> enemies, SectorType[,] field)
@@ -68,6 +77,55 @@ public class GamePresenter
         var offsetX = screenSize.Width / 2 - playerPixelPos.X - cellSize / 2;
         var offsetY = screenSize.Height / 2 - playerPixelPos.Y - cellSize / 2;
         return new Point(offsetX, offsetY);
+    }
+
+    public void UpdateAttackPreview(int mouseX, int mouseY)
+    {
+        var player = _game.Player;
+        var dx = Math.Abs(mouseX - player.FieldPos.X);
+        var dy = Math.Abs(mouseY - player.FieldPos.Y);
+
+        // Check if target is on a diagonal (4 diagonal directions)
+        if (dx == dy && dx > 0)
+        {
+            player.SetAttackTarget(new Point(mouseX, mouseY));
+            _view.Redraw();
+        }
+        else
+        {
+            player.ClearAttack();
+            _view.Redraw();
+        }
+    }
+
+    public async Task ExecuteAttack(int targetX, int targetY)
+    {
+        var player = _game.Player;
+        var dx = Math.Abs(targetX - player.FieldPos.X);
+        var dy = Math.Abs(targetY - player.FieldPos.Y);
+
+        // Only allow diagonal attacks
+        if (dx == dy && dx > 0)
+        {
+            foreach (var enemy in _game.Enemies.Where(e=>e.Pos == player.AttackTarget))
+            {
+                enemy.Kill();
+            }
+            
+            System.Diagnostics.Debug.WriteLine($"Attack at ({targetX}, {targetY})");
+            player.ClearAttack();
+            await Task.Delay(300);
+            System.Diagnostics.Debug.WriteLine("=== Updating enemies ===");
+            _enemiesPresenter.UpdateEnemies();
+            System.Diagnostics.Debug.WriteLine($"=== Enemies after update: {_game.Enemies.Count} ===");
+            _view.Redraw();
+        }
+    }
+
+    public void ClearAttack()
+    {
+        _game.Player.ClearAttack();
+        _view.Redraw();
     }
     
     public Player Player => _game.Player;

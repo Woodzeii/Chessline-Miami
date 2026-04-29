@@ -7,12 +7,18 @@ public class Player
      public Point WorldPos;
      public bool IsAlive;
      public bool IsRushReady;
+     public bool IsAttacking;
+     public Point AttackTarget;
+     public bool HavePistol;
+     public bool HaveShotgun;
 
      public Player(Point fieldPos)
      {
           FieldPos = fieldPos;
           IsAlive = true;
           IsRushReady = true;
+          IsAttacking = false;
+          AttackTarget = new Point(-1, -1);
      }
 
      public void TryMove(int deltaX, int deltaY, Game game)
@@ -22,5 +28,17 @@ public class Player
           {
                FieldPos = newPos;
           }
+     }
+
+     public void SetAttackTarget(Point target)
+     {
+          AttackTarget = target;
+          IsAttacking = true;
+     }
+
+     public void ClearAttack()
+     {
+          IsAttacking = false;
+          AttackTarget = new Point(-1, -1);
      }
 }
