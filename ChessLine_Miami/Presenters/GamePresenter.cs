@@ -7,6 +7,8 @@ namespace ChessLine_Miami.Presenters;
 
 public class GamePresenter
 {
+    private LevelPresenter _levelPresenter;
+    private EnemiesPresenter _enemiesPresenter;
     private PlayerPresenter _playerPresenter;
     private IGameView _view;
     private readonly Game _game;
@@ -17,7 +19,8 @@ public class GamePresenter
         _game = game;
         _view = view;
         _playerPresenter = new PlayerPresenter(game);
-    
+        _levelPresenter = new LevelPresenter(game.Level);
+        _enemiesPresenter = new EnemiesPresenter(game);
     }
 
     public void StartNewGame()
@@ -27,10 +30,18 @@ public class GamePresenter
         
     }
 
-    public void OnKeyDown(KeyEventArgs e)
+    public async Task OnKeyDown(KeyEventArgs e)
     {
-        _playerPresenter.WASD(e);
-        _view.Redraw();
+        var moved = _playerPresenter.WASD(e);
+        if (moved)
+        {
+            _view.Redraw();
+            await Task.Delay(300);
+            System.Diagnostics.Debug.WriteLine("=== Updating enemies ===");
+            _enemiesPresenter.UpdateEnemies();
+            System.Diagnostics.Debug.WriteLine($"=== Enemies after update: {_game.Enemies.Count} ===");
+            _view.Redraw();
+        }
     }
 
     public Point GetCameraOffset(Size screenSize)

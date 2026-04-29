@@ -3,6 +3,10 @@ using ChessLine_Miami.Presenters;
 using System;
 using System.Windows.Forms;
 namespace ChessLine_Miami.UI;
+class _constants{
+    public const int CellSize = 40;
+}
+
 public partial class GameForm : Form, IGameView
 {
     public PlayerViewer PlayerViewer { get; }
@@ -40,6 +44,7 @@ public partial class GameForm : Form, IGameView
     public void SetGame(Game game)
     {
         _game = game;
+        UpdateCameraOffset();
     }
 
     private void GameForm_KeyDown(object sender, KeyEventArgs e)
@@ -49,7 +54,16 @@ public partial class GameForm : Form, IGameView
 
     public void Redraw()
     {
+        UpdateCameraOffset();
         this.Invalidate();
+    }
+
+    private void UpdateCameraOffset()
+    {
+        if (_gamePresenter != null && _game != null)
+        {
+            CameraOffset = _gamePresenter.GetCameraOffset(this.ClientSize);
+        }
     }
 
     private void OnPaint(object sender, PaintEventArgs e)
@@ -61,5 +75,8 @@ public partial class GameForm : Form, IGameView
         
         if (_game?.Player != null)
             PlayerViewer.DrawPlayer(g, _game.Player, CameraOffset);
+        
+        if (_game?.Enemies != null)
+            EnemiesViewer.DrawEnemies(g, _game.Enemies, CameraOffset);
     }
 }

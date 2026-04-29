@@ -13,6 +13,8 @@ public class Enemy
     {
         Pos = p;
         Type = type;
+        IsAlive= true;
+        IsPlayerSeen = false;
     }
 
     public void TryMove(int deltaX, int deltaY, Game game)
@@ -50,11 +52,7 @@ public class Enemy
         IsAlive = false;
     }
 
-    public void Update(Game game)
-    {
-        if (!IsAlive) return;
-        if (!IsPlayerSeen) IsPlayerSeen = new PathFinder().IsPlayerSeen(game.Player, this, game.Level);
-    }
+    
 
      public void Move(Player player, Level level)
     {

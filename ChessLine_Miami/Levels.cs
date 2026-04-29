@@ -3,7 +3,8 @@
 public class Levels
 {
    public static String Level1 =
-        "WWWWWWWWWWWWWW\nW............W\nW..P....K....W\nW............W\nW.....I......W\nW..LLLLLL....W\nW.......R....W\nWWWWWWWWWWWWWW\n";
+        "WWWWWWWWWWWWWW\nW......R.....W\nW..P....K....W\nW............W\nW.....I......W\nW..LLLLLL....W\nW.......R....W\nWWWWWWWWWWWWWW\n";
 
-    public static String Level2 = "";
+    public static string level2 = 
+        "WWWWWWWWWWWWWWWWWWW\nW....R.....R...WWWW\nW..P....K.......WWWW\nW............B..WWWW\nW.....I..........WWWW\nW..LLLLLL....L..WWWW\nW.......R....L..WWWW\nWWWWWWWWWWWWWWWWWWW\n";
 }

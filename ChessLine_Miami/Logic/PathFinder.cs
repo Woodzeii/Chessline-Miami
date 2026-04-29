@@ -2,11 +2,11 @@
 
 namespace ChessLine_Miami.Logic;
 
-public class PathFinder
+public static class PathFinder
 {
    
 
-    public bool IsPlayerSeen(Player player, Enemy enemy, Level level)
+    public static bool IsPlayerSeen(Player player, Enemy enemy, Level level)
     {
         //Алгоритм Брезенхема
         int x0 = enemy.Pos.X;

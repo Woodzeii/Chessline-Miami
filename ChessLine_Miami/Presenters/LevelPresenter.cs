@@ -49,21 +49,5 @@ public class LevelPresenter
         return new Point(fieldX, fieldY);
     }
 
-    public Point GetDirectionFromPlayerToTarget(Point playerFieldPos, Point targetFieldPos)
-    {
-        int dx = 0;
-        int dy = 0;
-
-        if (targetFieldPos.X > playerFieldPos.X)
-            dx = 1;
-        else if (targetFieldPos.X < playerFieldPos.X)
-            dx = -1;
-
-        if (targetFieldPos.Y > playerFieldPos.Y)
-            dy = 1;
-        else if (targetFieldPos.Y < playerFieldPos.Y)
-            dy = -1;
-
-        return new Point(dx, dy);
-    }
+   
 }

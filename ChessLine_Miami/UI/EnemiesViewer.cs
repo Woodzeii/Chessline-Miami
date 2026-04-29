@@ -5,7 +5,7 @@ public class EnemiesViewer
 {
     public void DrawEnemies(Graphics g, List<Enemy> enemies, Point cameraOffset)
     {
-        var cellSize = 40;
+        var cellSize = _constants.CellSize;
         foreach (var enemy in enemies)
         {
             var enemyRect = new Rectangle(enemy.Pos.X * cellSize + cameraOffset.X, enemy.Pos.Y * cellSize + cameraOffset.Y, cellSize, cellSize);
