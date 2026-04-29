@@ -13,7 +13,7 @@ public class Level
     
     public readonly HashSet<Point> Lava;
     
-    // Точки спавна (статические данные уровня)
+    // Точки спавна (статические данные уровня) 
     public readonly Point PlayerSpawn;
     public readonly List<Enemy> EnemySpawns;
 

@@ -15,31 +15,19 @@ public class Game
         Level = level;
         Player = new Player(level.PlayerSpawn);
         Enemies = level.EnemySpawns
-            .Select(e=>new Enemy(e.Pos, e.Type))
+            .Select((enemy) => new Enemy(enemy.Pos, enemy.Type))
             .ToList();
         IsPaused = false;
         Score = 0;
     }
 
+  
+
     public void Restart()
     {
         Player = new Player(Level.PlayerSpawn);
         Enemies = Level.EnemySpawns
-            .Select(e=>new Enemy(e.Pos, e.Type))
+            .Select((enemy) => new Enemy(enemy.Pos, enemy.Type))
             .ToList();
     }
-    
-    public void Pause()
-    {
-        IsPaused = true;
-    }
-    public void Resume()
-    {
-        IsPaused = false;
-    }
-    public void TogglePause()
-    {
-        IsPaused = !IsPaused;
-    }
-    
 }
