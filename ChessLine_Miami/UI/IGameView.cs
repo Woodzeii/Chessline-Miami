@@ -11,10 +11,11 @@ public interface IGameView
     event Action<Keys> KeyPressed;
 
     // Свойства: Презентер будет "запихивать" сюда данные для отрисовки
-    Player Player { set; }
-    List<Enemy> Enemies { set; }
-    Level Level { set; }
-    Point CameraOffset { set; }
+    Size ClientSize { get; }
+    
+    
+    void SetGame(Game game);
 
     void Redraw(); // Просто вызов Invalidate()
+    
 }

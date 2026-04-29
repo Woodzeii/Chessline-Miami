@@ -26,7 +26,7 @@ public class EnemiesPresenter
     {
         if (enemy.IsAlive)
         {
-            enemy.TryMove(deltaX, deltaY, _game.Level);
+            enemy.TryMove(deltaX, deltaY, _game);
         }
     }
 
