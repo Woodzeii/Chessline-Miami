@@ -39,17 +39,7 @@ static class Program
         // Создаем форму
         Form = new GameForm();
 
-        // Создаем модель (игру)
-        if (levels.Count == 0)
-        {
-            MessageBox.Show("No levels found! Exiting.");
-            return;
-        }
-        if (currentLevelIndex >= levels.Count)
-        {
-            MessageBox.Show("No more levels available! Exiting.");
-            return;
-        }
+        // Создаем модель (игру) и презентер, связывая их с формой
         LoadNextLevel();
 
         Application.Run(Form);

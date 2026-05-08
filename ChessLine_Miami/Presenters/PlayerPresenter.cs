@@ -14,23 +14,25 @@ public class PlayerPresenter
 
     public Player Player => _game.Player;
 
-    public bool MoveOnKey(KeyEventArgs e, int deltaX, int deltaY, Keys key)
+    public bool MoveOnKey(KeyEventArgs e, int deltaX, int deltaY, Keys key, int steps)
     {
         if (e.KeyCode == key)
         {
-            _game.Player.TryMove(deltaX, deltaY, _game);
+            _game.Player.TryMove(deltaX, deltaY, _game, steps);
             return true;
         }
         return false;
     }
     
-    public bool WASD(KeyEventArgs e)
+    public bool WASD(KeyEventArgs e, bool isRush)
     {
         var moved = false;
-        moved |= MoveOnKey(e, 0, -1, Keys.W); // W - up
-        moved |= MoveOnKey(e, 0, 1, Keys.S);  // S - down
-        moved |= MoveOnKey(e, -1, 0, Keys.A);  // A - left
-        moved |= MoveOnKey(e, 1, 0, Keys.D);   // D - right
+        var steps = isRush ? 2 : 1;
+
+        moved |= MoveOnKey(e, 0, -1, Keys.W, steps); // W - up
+        moved |= MoveOnKey(e, 0, 1, Keys.S, steps);  // S - down
+        moved |= MoveOnKey(e, -1, 0, Keys.A, steps);  // A - left
+        moved |= MoveOnKey(e, 1, 0, Keys.D, steps);   // D - right
         return moved;
     }
 

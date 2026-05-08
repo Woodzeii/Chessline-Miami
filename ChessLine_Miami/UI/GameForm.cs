@@ -15,6 +15,7 @@ public partial class GameForm : Form, IGameView
     
     private GamePresenter _gamePresenter;
      Game _game { get; set; } 
+    private bool _isRPressed;
     
     public event Action<Keys> KeyPressed;
     
@@ -34,6 +35,7 @@ public partial class GameForm : Form, IGameView
         this.DoubleBuffered = true;
         this.Paint += new PaintEventHandler(OnPaint);
         this.KeyDown += GameForm_KeyDown;
+        this.KeyUp += GameForm_KeyUp;
         this.MouseMove += GameForm_MouseMove;
         this.MouseClick += GameForm_MouseClick;
         this.MouseEnter += (s, e) => IsMouseOverForm = true;
@@ -54,7 +56,20 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_KeyDown(object sender, KeyEventArgs e)
     {
-        _gamePresenter?.OnKeyDown(e);
+        if (e.KeyCode == Keys.R)
+        {
+            _isRPressed = true;
+        }
+
+        _gamePresenter?.OnKeyDown(e, _isRPressed);
+    }
+
+    private void GameForm_KeyUp(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.R)
+        {
+            _isRPressed = false;
+        }
     }
 
     private void GameForm_MouseMove(object sender, MouseEventArgs e)

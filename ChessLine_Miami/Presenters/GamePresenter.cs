@@ -31,7 +31,7 @@ public class GamePresenter
         
     }
 
-    public async Task OnKeyDown(KeyEventArgs e)
+    public async Task OnKeyDown(KeyEventArgs e, bool isRush)
     {
         if (await EndIfDead()) return;
         if (_game.IsLevelFinished())
@@ -41,7 +41,7 @@ public class GamePresenter
             _game.FinishLevel();
             return;
         }
-        var moved = _playerPresenter.WASD(e);
+        var moved = _playerPresenter.WASD(e, isRush);
         
         if (moved)
         {

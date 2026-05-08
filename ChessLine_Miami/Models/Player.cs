@@ -23,11 +23,33 @@ public class Player
 
      public void TryMove(int deltaX, int deltaY, Game game)
      {
-          var newPos = new Point(FieldPos.X + deltaX, FieldPos.Y + deltaY);
-          if (CollisionDetector.CanMoveTo(newPos, game))
+          TryMove(deltaX, deltaY, game, 1);
+     }
+
+     public void TryMove(int deltaX, int deltaY, Game game, int steps)
+     {
+          if (steps <= 1)
           {
-               FieldPos = newPos;
+               var newPos = new Point(FieldPos.X + deltaX, FieldPos.Y + deltaY);
+               if (CollisionDetector.CanMoveTo(newPos, game))
+               {
+                    FieldPos = newPos;
+               }
+               return;
           }
+
+          var currentPos = FieldPos;
+          for (int step = 1; step <= steps; step++)
+          {
+               var nextPos = new Point(currentPos.X + deltaX, currentPos.Y + deltaY);
+               if (!CollisionDetector.CanMoveTo(nextPos, game))
+               {
+                    return;
+               }
+               currentPos = nextPos;
+          }
+
+          FieldPos = currentPos;
      }
 
      public void SetAttackTarget(Point target)
