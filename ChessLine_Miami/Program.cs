@@ -51,14 +51,6 @@ static class Program
             return;
         }
         LoadNextLevel();
-        // var lvl = levels[currentLevelIndex];
-        // var game = new Game(lvl); 
-
-        // // Создаем презентер и связываем его с формой и моделью
-        // var presenter = new GamePresenter(game, Form);
-
-        // Form.SetPresenter(presenter);
-        // Form.SetGame(game);
 
         Application.Run(Form);
     }
