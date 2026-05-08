@@ -1,9 +1,8 @@
 ﻿namespace ChessLine_Miami;
-
-public class Levels
+public static class Levels
 {
-     static string level1 = 
-"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
+
+     static string level1 = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
 "W......................................W\n" +
 "W......................................W\n" +
 "W......................................W\n" +
@@ -35,14 +34,16 @@ public class Levels
 "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
 "W......................................W\n" +
 "W......WWWWWWWWWWWWWWWWWWWWWWWWWWW.....W\n" +
-"W......W.......................W.....W\n" +
-"W......W..P..................R.W.....W\n" +
-"W......W.......................W.....W\n" +
-"W......WWWWWWWWWWWWWWWWWWWWWWWWW.....W\n" +
-"W.....................................W\n" +
-"W...........I.........................W\n" +
-"W.............L.......................W\n" +
-"W.....................................W\n" +
-"W.....................................W\n" +
+"W......W.........................W.....W\n" +
+"W......W..P..................R...W.....W\n" +
+"W......W.........................W.....W\n" +
+"W......WWWWWWWWWWWWWWWWWWWWWWWWWWW.....W\n" +
+"W......................................W\n" +
+"W...........I..........................W\n" +
+"W.............L........................W\n" +
+"W......................................W\n" +
+"W......................................W\n" +
 "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
+
+    public static string[] AllLevels = new string[] { level1, level2, level3 };
 }

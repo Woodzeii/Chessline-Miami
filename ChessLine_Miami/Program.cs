@@ -5,14 +5,26 @@ using ChessLine_Miami.UI;
 using ChessLine_Miami.Presenters;
 using ChessLine_Miami.Models;
 using ChessLine_Miami.Logic;
+using Microsoft.VisualBasic;
 namespace ChessLine_Miami;
 
 static class Program
 {
 
+    private static int currentLevelIndex = 0;
+
+    private static readonly List<Level> levels = Levels.AllLevels
+    .Select(lvlStr => LevelGenerator
+    .LoadFromStringArray(lvlStr.Split('\n').Where(s => s.Length > 0).ToArray()))
+    .ToList();
+
+
+
+    static GameForm Form;
     /// <summary>
     ///  The main entry point for the application.
     /// </summary>
+    /// 
     /// 
     [STAThread]
     static void Main()
@@ -20,24 +32,57 @@ static class Program
         ApplicationConfiguration.Initialize();
         
         var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Music/Ambient.wav"); 
-        // ^ Даже если расширение .wav, внутри может быть mp3, MediaPlayer это проглотит.
 
         var mediaPlayer = new MediaPlayer();
         mediaPlayer.Open(new Uri(musicPath));
         mediaPlayer.Play();
         // Создаем форму
-        var form = new GameForm();
+        Form = new GameForm();
 
         // Создаем модель (игру)
-        var lvl = LevelGenerator.LoadFromStringArray(Levels.level2.Split('\n').Where(s => s.Length > 0).ToArray());
-        var game = new Game(lvl); 
+        if (levels.Count == 0)
+        {
+            MessageBox.Show("No levels found! Exiting.");
+            return;
+        }
+        if (currentLevelIndex >= levels.Count)
+        {
+            MessageBox.Show("No more levels available! Exiting.");
+            return;
+        }
+        LoadNextLevel();
+        // var lvl = levels[currentLevelIndex];
+        // var game = new Game(lvl); 
 
-        // Создаем презентер и связываем его с формой и моделью
-        var presenter = new GamePresenter(game, form);
+        // // Создаем презентер и связываем его с формой и моделью
+        // var presenter = new GamePresenter(game, Form);
 
-        form.SetPresenter(presenter);
-        form.SetGame(game);
+        // Form.SetPresenter(presenter);
+        // Form.SetGame(game);
 
-        Application.Run(form);
+        Application.Run(Form);
+    }
+
+    
+    public static void LoadNextLevel()
+    {
+        if (currentLevelIndex >= levels.Count)
+        {
+            MessageBox.Show("Игра пройдена!");
+            Application.Exit();
+            return;
+        }
+        var lvlData = levels[currentLevelIndex];
+        // 2. Создаем новую игру
+        var game = new Game(lvlData);
+        var presenter = new GamePresenter(game, Form);
+
+        game.OnFinished += () => {
+            currentLevelIndex++;
+            LoadNextLevel(); 
+        };
+    
+        Form.SetPresenter(presenter);
+        Form.SetGame(game);
     }
 }

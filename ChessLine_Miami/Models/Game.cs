@@ -8,7 +8,14 @@ public class Game
     public Player Player { get; set; }
     public List<Enemy> Enemies { get; set; }
     public bool IsPaused { get; set; }
+    public event Action OnFinished;
+
     public int Score { get; set; }
+
+    public void FinishLevel()
+    {
+        OnFinished?.Invoke();
+    }
 
     public Game(Level level)
     {
@@ -27,5 +34,14 @@ public class Game
         Enemies = Level.EnemySpawns
             .Select((enemy) => new Enemy(enemy.Pos, enemy.Type))
             .ToList();
+    }
+
+    public bool IsLevelFinished()
+    {
+        if (Enemies.Where(e=> e.IsAlive).Count() == 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

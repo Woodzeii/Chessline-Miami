@@ -34,6 +34,13 @@ public class GamePresenter
     public async Task OnKeyDown(KeyEventArgs e)
     {
         if (await EndIfDead()) return;
+        if (_game.IsLevelFinished())
+        {
+            MessageBox.Show("Level completed! Starting next level.");
+            await Task.Delay(500);
+            _game.FinishLevel();
+            return;
+        }
         var moved = _playerPresenter.WASD(e);
         
         if (moved)
@@ -45,6 +52,7 @@ public class GamePresenter
             System.Diagnostics.Debug.WriteLine($"=== Enemies after update: {_game.Enemies.Count} ===");
             _view.Redraw();
             if (await EndIfDead()) return;
+            
         }
     }
 
