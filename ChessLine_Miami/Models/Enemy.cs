@@ -39,8 +39,8 @@ public class Enemy
             return;
         }
 
-        // Враги не проходят сквозь врагов
-        if (game.Enemies.Any(e => e.Pos.X == newX && e.Pos.Y == newY))
+        // Враги не проходят сквозь живых врагов
+        if (game.Enemies.Any(e => e.IsAlive && e.Pos.X == newX && e.Pos.Y == newY))
             return; 
 
         // Обновляем позицию врага

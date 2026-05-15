@@ -15,9 +15,11 @@ static class Program
 
     private static readonly List<Level> levels = new List<Level>
     {
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[0].Split('\n').Where(s => s.Length > 0).ToArray(), "Level1"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[0].Split('\n').Where(s => s.Length > 0).ToArray(), "StartLevel"),
         LevelGenerator.LoadFromStringArray(Levels.AllLevels[1].Split('\n').Where(s => s.Length > 0).ToArray(), "Level2"),
         LevelGenerator.LoadFromStringArray(Levels.AllLevels[2].Split('\n').Where(s => s.Length > 0).ToArray(), "Level3"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[3].Split('\n').Where(s => s.Length > 0).ToArray(), "Level4"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[4].Split('\n').Where(s => s.Length > 0).ToArray(), "Level5"),
     };
 
 

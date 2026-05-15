@@ -9,8 +9,8 @@ public class CollisionDetector
         var x = newPos.X;
         var y = newPos.Y;
         if (x < 0 || y < 0 || x >= game.Level.Size.Width || y >= game.Level.Size.Height) return false;
-        if (game.Level.Field[x,y]==SectorType.Wall) return  false;
-        if (game.Enemies.Select(enemy=>enemy.Pos).Contains(new Point(x,y))) return false;
+        if (game.Level.Field[x,y] == SectorType.Wall) return false;
+        if (game.Enemies.Any(enemy => enemy.IsAlive && enemy.Pos == newPos)) return false;
         return true;
     }
     
@@ -23,7 +23,7 @@ public class CollisionDetector
 /// <returns></returns>
     public static bool CheckCollision(Player player, List<Enemy> enemies)
     {
-        return (enemies.Any(enemy => enemy.Pos == player.FieldPos));
+        return enemies.Any(enemy => enemy.IsAlive && enemy.Pos == player.FieldPos);
     }
 
 

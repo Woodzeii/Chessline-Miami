@@ -122,7 +122,7 @@ public class GamePresenter
         var dy = Math.Abs(targetY - player.FieldPos.Y);
 
         // Only allow diagonal attacks
-        if (dx == dy && dx > 0)
+        if (dx == dy && dx == 1)
         {
             foreach (var enemy in _game.Enemies.Where(e=>e.Pos == player.AttackTarget))
             {
@@ -135,12 +135,9 @@ public class GamePresenter
                         mediaPlayer.Play();
 
 
-                // using (System.Media.SoundPlayer playerSound = new System.Media.SoundPlayer(@"SFX\hotline-miami-hit.wav"))
-                // {
-                //     playerSound.Play();
-                // }
+             
             }
-            
+            EndIfDead(); // Проверяем, не умер ли игрок от контратаки
             System.Diagnostics.Debug.WriteLine($"Attack at ({targetX}, {targetY})");
             player.ClearAttack();
             await Task.Delay(300);

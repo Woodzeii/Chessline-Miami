@@ -145,7 +145,7 @@ public partial class GameForm : Form, IGameView
         }
 
         // Tutorial button for first level
-        if (MenuViewer._tutorialButtonRect.Contains(e.Location) && _game?.Level?.Name == "Level1")
+        if (MenuViewer._tutorialButtonRect.Contains(e.Location) && _game?.Level?.Name == "StartLevel")
         {
             MenuViewer.IsShowingTutorial = true;
             MenuViewer.TutorialImageIndex = 0;
@@ -196,7 +196,7 @@ public partial class GameForm : Form, IGameView
             PlayerViewer.DrawAttackPreview(g, _game.Player, CameraOffset);
 
         // Draw tutorial button for first level
-        if (_game?.Level?.Name == "Level1")
+        if (_game?.Level?.Name == "StartLevel")
         {
             MenuViewer.DrawTutorialButton(g, _game, this);
         }
