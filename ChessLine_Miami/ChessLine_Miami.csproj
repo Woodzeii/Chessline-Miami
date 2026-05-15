@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <Folder Include="UI\" />
+      <Folder Include="UI\Photo\guide\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,6 +46,15 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="UI\Photo\bishop.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="UI\SFX\hotline-miami-hit.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="UI\Photo\guide\AttackGuide.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="UI\Photo\guide\WalkGuide.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

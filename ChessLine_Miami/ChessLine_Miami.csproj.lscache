@@ -82,6 +82,7 @@ UI/
  GameForm.Designer.cs
  IGameView.cs
  LevelViewer.cs
+ MenuViewer.cs
  PlayerViewer.cs
 
 [metadataReferences]

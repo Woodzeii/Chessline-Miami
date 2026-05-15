@@ -1,6 +1,9 @@
 using ChessLine_Miami.Models;
 using ChessLine_Miami.UI;
 using ChessLine_Miami.Logic;
+using System.IO;
+using System.Windows.Media;
+
 using System;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
@@ -29,6 +32,12 @@ public class GamePresenter
         _game.Restart();
         _view.SetGame(_game);
         
+    }
+
+    public void RestartLevel()
+    {
+        _game.Restart();
+        _view.Redraw();
     }
 
     public async Task OnKeyDown(KeyEventArgs e, bool isRush)
@@ -118,6 +127,18 @@ public class GamePresenter
             foreach (var enemy in _game.Enemies.Where(e=>e.Pos == player.AttackTarget))
             {
                 enemy.Kill();
+
+                var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/hotline-miami-hit.wav"); 
+
+                        var mediaPlayer = new MediaPlayer();
+                        mediaPlayer.Open(new Uri(musicPath));
+                        mediaPlayer.Play();
+
+
+                // using (System.Media.SoundPlayer playerSound = new System.Media.SoundPlayer(@"SFX\hotline-miami-hit.wav"))
+                // {
+                //     playerSound.Play();
+                // }
             }
             
             System.Diagnostics.Debug.WriteLine($"Attack at ({targetX}, {targetY})");

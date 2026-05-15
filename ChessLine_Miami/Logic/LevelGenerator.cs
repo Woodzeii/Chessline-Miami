@@ -3,7 +3,7 @@ namespace ChessLine_Miami.Logic;
 
 public class LevelGenerator
 {
-    public static Level LoadFromStringArray(string[] mapLines)
+    public static Level LoadFromStringArray(string[] mapLines, string levelName = "Level")
     {
         var walls = new HashSet<Point>();
         var lava = new HashSet<Point>();
@@ -42,7 +42,7 @@ public class LevelGenerator
             }
         }
 
-        return new Level("New Level", room, walls, lava, player, enemies, mapLines);
+        return new Level(levelName, room, walls, lava, player, enemies, mapLines);
     }
 
     public SectorType[,] CreateField(Level level)

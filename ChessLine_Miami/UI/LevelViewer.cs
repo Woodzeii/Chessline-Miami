@@ -8,7 +8,14 @@ public class LevelViewer
     
     public void DrawLevel(Graphics g, Level level, Point cameraOffset)
     {
-        Image lavaImg = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/Lava.jpg"));; 
+        Image lavaImg = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/Lava.jpg"));
+        using var wallBrush = new SolidBrush(Color.FromArgb(5, 5, 10));
+        using var wallHighlightPen = new Pen(Color.White, 4);
+        using var glowPen = new Pen(Color.FromArgb(100, 150, 255), 6);
+
+        bool IsWall(int px, int py)
+            => px >= 0 && py >= 0 && px < level.Size.Width && py < level.Size.Height && level.GetSector(px, py) == SectorType.Wall;
+
         for (int x = 0; x < level.Size.Width; x++)
         {
             for (int y = 0; y < level.Size.Height; y++)
@@ -25,14 +32,37 @@ public class LevelViewer
                 switch (sector)
                 {
                     case SectorType.Wall:
-                        g.FillRectangle(Brushes.Gray, cellRect);
+                        g.FillRectangle(wallBrush, cellRect);
+
+                        if (!IsWall(x, y - 1))
+                        {
+                            g.DrawLine(glowPen, cellRect.Left, cellRect.Top, cellRect.Right, cellRect.Top);
+                            g.DrawLine(wallHighlightPen, cellRect.Left, cellRect.Top, cellRect.Right, cellRect.Top);
+                        }
+                        if (!IsWall(x, y + 1))
+                        {
+                            g.DrawLine(glowPen, cellRect.Left, cellRect.Bottom - 1, cellRect.Right, cellRect.Bottom - 1);
+                            g.DrawLine(wallHighlightPen, cellRect.Left, cellRect.Bottom - 1, cellRect.Right, cellRect.Bottom - 1);
+                        }
+                        if (!IsWall(x - 1, y))
+                        {
+                            g.DrawLine(glowPen, cellRect.Left, cellRect.Top, cellRect.Left, cellRect.Bottom);
+                            g.DrawLine(wallHighlightPen, cellRect.Left, cellRect.Top, cellRect.Left, cellRect.Bottom);
+                        }
+                        if (!IsWall(x + 1, y))
+                        {
+                            g.DrawLine(glowPen, cellRect.Right - 1, cellRect.Top, cellRect.Right - 1, cellRect.Bottom);
+                            g.DrawLine(wallHighlightPen, cellRect.Right - 1, cellRect.Top, cellRect.Right - 1, cellRect.Bottom);
+                        }
                         break;
                     case SectorType.Lava:
-                        
-                        g.DrawImage(lavaImg, cellRect);;
+                        g.DrawImage(lavaImg, cellRect);
                         break;
                     default:
-                        g.FillRectangle(Brushes.LightGray, cellRect);
+                        var floorBrush = ((x + y) % 2 == 0)
+                            ? new SolidBrush(Color.FromArgb(24, 16, 42))
+                            : new SolidBrush(Color.FromArgb(14, 8, 24));
+                        g.FillRectangle(floorBrush, cellRect);
                         break;
                 }
             }

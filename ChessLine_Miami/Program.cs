@@ -13,10 +13,12 @@ static class Program
 
     private static int currentLevelIndex = 0;
 
-    private static readonly List<Level> levels = Levels.AllLevels
-    .Select(lvlStr => LevelGenerator
-    .LoadFromStringArray(lvlStr.Split('\n').Where(s => s.Length > 0).ToArray()))
-    .ToList();
+    private static readonly List<Level> levels = new List<Level>
+    {
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[0].Split('\n').Where(s => s.Length > 0).ToArray(), "Level1"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[1].Split('\n').Where(s => s.Length > 0).ToArray(), "Level2"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[2].Split('\n').Where(s => s.Length > 0).ToArray(), "Level3"),
+    };
 
 
 

@@ -1,6 +1,8 @@
 using ChessLine_Miami.Models;
 using ChessLine_Miami.Presenters;
 using System;
+using System.IO;
+using System.Windows.Controls;
 using System.Windows.Forms;
 namespace ChessLine_Miami.UI;
 class _constants{
@@ -13,10 +15,19 @@ public partial class GameForm : Form, IGameView
     public PlayerViewer PlayerViewer { get; }
     public LevelViewer LevelViewer { get; }
     public EnemiesViewer EnemiesViewer { get; }
+    public MenuViewer MenuViewer { get; } 
     
     private GamePresenter _gamePresenter;
      Game _game { get; set; } 
     private bool _isRPressed;
+    
+    // private bool _isPaused;
+    // private bool _isShowingTutorial;
+    // private int _tutorialImageIndex; // 0 = WalkGuide, 1 = AttackGuide
+    // private Rectangle _tutorialButtonRect;
+    // private Rectangle _pauseResumeButtonRect;
+    // private Rectangle _pauseRestartButtonRect;
+    // private Rectangle _pauseExitButtonRect;
     
     public event Action<Keys> KeyPressed;
     
@@ -30,6 +41,7 @@ public partial class GameForm : Form, IGameView
         PlayerViewer = new PlayerViewer();
         LevelViewer = new LevelViewer();
         EnemiesViewer = new EnemiesViewer();
+        MenuViewer = new MenuViewer();
         
         
         InitializeComponent();
@@ -66,6 +78,16 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_KeyDown(object sender, KeyEventArgs e)
     {
+        if (e.KeyCode == Keys.Escape)
+        {
+            MenuViewer.IsPaused = !MenuViewer.IsPaused;
+            e.Handled = true;
+            return;
+        }
+
+        if (MenuViewer.IsPaused || MenuViewer.IsShowingTutorial)
+            return;
+
         if (e.KeyCode == Keys.R)
         {
             _isRPressed = true;
@@ -96,6 +118,40 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_MouseClick(object sender, MouseEventArgs e)
     {
+        if (MenuViewer.IsShowingTutorial)
+        {
+            MenuViewer.TutorialImageIndex = (MenuViewer.TutorialImageIndex + 1) % 2;
+            if (MenuViewer.TutorialImageIndex == 0)
+                MenuViewer.IsShowingTutorial = false;
+            return;
+        }
+
+        if (MenuViewer.IsPaused)
+        {
+            if (MenuViewer._pauseResumeButtonRect.Contains(e.Location))
+            {
+                MenuViewer.IsPaused = false;
+            }
+            else if (MenuViewer._pauseRestartButtonRect.Contains(e.Location))
+            {
+                MenuViewer.IsPaused = false;
+                _gamePresenter?.RestartLevel();
+            }
+            else if (MenuViewer._pauseExitButtonRect.Contains(e.Location))
+            {
+                this.Close();
+            }
+            return;
+        }
+
+        // Tutorial button for first level
+        if (MenuViewer._tutorialButtonRect.Contains(e.Location) && _game?.Level?.Name == "Level1")
+        {
+            MenuViewer.IsShowingTutorial = true;
+            MenuViewer.TutorialImageIndex = 0;
+            return;
+        }
+
         if (_gamePresenter != null && _game?.Player != null)
         {
             var cellSize = _constants.CellSize;
@@ -136,7 +192,26 @@ public partial class GameForm : Form, IGameView
             EnemiesViewer.DrawEnemies(g, _game.Enemies, CameraOffset);
         
         // Draw attack preview
-        if (_game?.Player != null && _game.Player.IsAttacking && IsMouseOverForm)
+        if (_game?.Player != null && _game.Player.IsAttacking && IsMouseOverForm && !MenuViewer.IsPaused && !MenuViewer.IsShowingTutorial)
             PlayerViewer.DrawAttackPreview(g, _game.Player, CameraOffset);
+
+        // Draw tutorial button for first level
+        if (_game?.Level?.Name == "Level1")
+        {
+            MenuViewer.DrawTutorialButton(g, _game, this);
+        }
+
+        // Draw tutorial screen
+        if (MenuViewer.IsShowingTutorial)
+        {
+            MenuViewer.DrawTutorialScreen(g, this);
+        }
+
+        // Пауза
+        if (MenuViewer.IsPaused)
+        {
+            MenuViewer.DrawPauseMenu(g, this);
+        }
     }
+
 }
