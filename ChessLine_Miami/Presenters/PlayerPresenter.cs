@@ -12,33 +12,55 @@ public class PlayerPresenter
         _game = game;
     }
 
-    public Player Player => _game.Player;
+    public Player player => _game.Player;
 
     public bool MoveOnKey(KeyEventArgs e, int deltaX, int deltaY, Keys key, int steps)
     {
         if (e.KeyCode == key)
         {
-            _game.Player.TryMove(deltaX, deltaY, _game, steps);
+            player.TryMove(deltaX, deltaY, _game, steps);
             return true;
         }
         return false;
     }
     
-    public bool WASD(KeyEventArgs e, bool isRush)
+    public bool WASD(KeyEventArgs e, bool isRPressed)
     {
-        var moved = false;
-        var steps = isRush ? 2 : 1;
 
+        bool isMovementKey = e.KeyCode == Keys.W || e.KeyCode == Keys.S || 
+                     e.KeyCode == Keys.A || e.KeyCode == Keys.D;
+                         
+        if (!isMovementKey) return false;
+
+        bool dynamicRushActive = isRPressed && player.IsRushReady();
+        int steps = dynamicRushActive ? 2 : 1;
+
+
+        var moved = false;
         moved |= MoveOnKey(e, 0, -1, Keys.W, steps); // W - up
         moved |= MoveOnKey(e, 0, 1, Keys.S, steps);  // S - down
         moved |= MoveOnKey(e, -1, 0, Keys.A, steps);  // A - left
         moved |= MoveOnKey(e, 1, 0, Keys.D, steps);   // D - right
+        if (moved)
+    {
+        if (dynamicRushActive)
+        {
+            // Рывоr сделан
+            player.RushCooldown = Player.StepsToRush; 
+        }
+        else
+        {
+            // Сделан обычный шаг, уменьшаем кулдаун на х..од
+            player.RushCooldown = Math.Max(0, player.RushCooldown - 1);
+        }
+    }
+
         return moved;
     }
 
     public void MovePlayer(int deltaX, int deltaY)
     {
-        _game.Player.TryMove(deltaX, deltaY, _game);
+        player.TryMove(deltaX, deltaY, _game);
     }
 
     

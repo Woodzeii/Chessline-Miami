@@ -9,6 +9,7 @@ class _constants{
 
 public partial class GameForm : Form, IGameView
 {
+    private System.Windows.Forms.Timer _animationTimer;
     public PlayerViewer PlayerViewer { get; }
     public LevelViewer LevelViewer { get; }
     public EnemiesViewer EnemiesViewer { get; }
@@ -25,7 +26,7 @@ public partial class GameForm : Form, IGameView
     
     public GameForm()
     {
-        //Тут нужен gamepresenter?
+       
         PlayerViewer = new PlayerViewer();
         LevelViewer = new LevelViewer();
         EnemiesViewer = new EnemiesViewer();
@@ -38,8 +39,17 @@ public partial class GameForm : Form, IGameView
         this.KeyUp += GameForm_KeyUp;
         this.MouseMove += GameForm_MouseMove;
         this.MouseClick += GameForm_MouseClick;
+        this.FormClosed += (s, e) => _animationTimer?.Dispose();
         this.MouseEnter += (s, e) => IsMouseOverForm = true;
         this.MouseLeave += (s, e) => { IsMouseOverForm = false; _gamePresenter?.ClearAttack(); };
+        _animationTimer = new System.Windows.Forms.Timer();
+        _animationTimer.Interval = 16; // 60 кадров в секунду 
+        _animationTimer.Tick += (s, e) => 
+    {
+        // Принудительно обновляем только интерфейс
+        this.Invalidate(); 
+    };
+    _animationTimer.Start();
     }
 
     public void SetPresenter(GamePresenter presenter)
@@ -117,7 +127,10 @@ public partial class GameForm : Form, IGameView
             LevelViewer.DrawLevel(g, _game.Level, CameraOffset);
         
         if (_game?.Player != null)
+        {
             PlayerViewer.DrawPlayer(g, _game.Player, CameraOffset);
+            PlayerViewer.DrawRushBar(g, _game.Player, _isRPressed);
+        }
         
         if (_game?.Enemies != null)
             EnemiesViewer.DrawEnemies(g, _game.Enemies, CameraOffset);

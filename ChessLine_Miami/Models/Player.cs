@@ -6,17 +6,21 @@ public class Player
      public Point FieldPos;
      public Point WorldPos;
      public bool IsAlive;
-     public bool IsRushReady;
+     //public bool IsRushReady;
+     public int RushCooldown;
+     public const int StepsToRush = 5;
      public bool IsAttacking;
      public Point AttackTarget;
      public bool HavePistol;
      public bool HaveShotgun;
+     public bool Ammo;
 
      public Player(Point fieldPos)
      {
           FieldPos = fieldPos;
           IsAlive = true;
-          IsRushReady = true;
+          
+          RushCooldown = StepsToRush;
           IsAttacking = false;
           AttackTarget = new Point(-1, -1);
      }
@@ -62,5 +66,11 @@ public class Player
      {
           IsAttacking = false;
           AttackTarget = new Point(-1, -1);
+     }
+     public bool IsRushReady()
+     {
+          if (RushCooldown ==0)
+               return true;
+          return false;
      }
 }
