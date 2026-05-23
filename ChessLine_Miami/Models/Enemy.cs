@@ -1,11 +1,13 @@
-﻿using System;
+﻿using System.Drawing;
 using ChessLine_Miami.Logic;
+
 namespace ChessLine_Miami.Models;
 
 public class Enemy
 {
     public EnemyType Type;
     public Point Pos;
+    public PointF RenderFieldPos;
     public bool IsAlive;
     public bool IsPlayerSeen { get; set; }
 
@@ -13,8 +15,28 @@ public class Enemy
     {
         Pos = p;
         Type = type;
-        IsAlive= true;
+        IsAlive = true;
         IsPlayerSeen = false;
+        ResetRenderPosition();
+    }
+
+    public void ResetRenderPosition()
+    {
+        RenderFieldPos = new PointF(Pos.X, Pos.Y);
+    }
+
+    public void UpdateRenderPosition(float smoothing = 0.18f)
+    {
+        var target = new PointF(Pos.X, Pos.Y);
+        RenderFieldPos = new PointF(
+            RenderFieldPos.X + (target.X - RenderFieldPos.X) * smoothing,
+            RenderFieldPos.Y + (target.Y - RenderFieldPos.Y) * smoothing
+        );
+
+        if (Math.Abs(target.X - RenderFieldPos.X) < 0.01f && Math.Abs(target.Y - RenderFieldPos.Y) < 0.01f)
+        {
+            RenderFieldPos = target;
+        }
     }
 
     public void TryMove(int deltaX, int deltaY, Game game)
@@ -41,7 +63,7 @@ public class Enemy
 
         // Враги не проходят сквозь живых врагов
         if (game.Enemies.Any(e => e.IsAlive && e.Pos.X == newX && e.Pos.Y == newY))
-            return; 
+            return;
 
         // Обновляем позицию врага
         Pos = new Point(newX, newY);
@@ -52,9 +74,7 @@ public class Enemy
         IsAlive = false;
     }
 
-    
-
-     public void Move(Player player, Level level)
+    public void Move(Player player, Level level)
     {
         switch (Type)
         {

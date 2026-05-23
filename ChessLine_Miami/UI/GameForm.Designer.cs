@@ -26,12 +26,8 @@ partial class GameForm
     {
         this.components = new System.ComponentModel.Container();
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(1920, 1080);
-        this.Text = "GameForm";
-        
-        //this.FormBorderStyle = FormBorderStyle.None;
-        //this.WindowState = FormWindowState.Maximized;
-        //this.Bounds = Screen.PrimaryScreen.Bounds;
+        this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+        this.Text = "ChessLine Miami";
     }
-
+    
 }

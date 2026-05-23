@@ -22,7 +22,7 @@ public static class Levels
     "W..........W......P.....W\n" +
     "W..........W............W\n" +
     "W..........W............W\n" +
-    "W....WWWWWWWW...........W\n" +
+    "W....WWWWWWW............W\n" +
     "W.......................W\n" +
     "W......................LW\n" +
     "W............WWWWWWW..WWW\n" +
@@ -127,5 +127,5 @@ public static class Levels
     "W.......................W\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
-    public static string[] AllLevels = new string[] { level3, level2, level3, level4, level5 };
+    public static string[] AllLevels = new string[] { level1, level2, level3, level4, level5 };
 }

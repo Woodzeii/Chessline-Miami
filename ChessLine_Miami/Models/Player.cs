@@ -1,12 +1,13 @@
-﻿namespace ChessLine_Miami.Models;
-using Logic;
+﻿using System.Drawing;
+using ChessLine_Miami.Logic;
+
+namespace ChessLine_Miami.Models;
 
 public class Player
 {
      public Point FieldPos;
-     public Point WorldPos;
+     public PointF RenderFieldPos;
      public bool IsAlive;
-     //public bool IsRushReady;
      public int RushCooldown;
      public const int StepsToRush = 5;
      public bool IsAttacking;
@@ -19,10 +20,29 @@ public class Player
      {
           FieldPos = fieldPos;
           IsAlive = true;
-          
           RushCooldown = StepsToRush;
           IsAttacking = false;
           AttackTarget = new Point(-1, -1);
+          ResetRenderPosition();
+     }
+
+     public void ResetRenderPosition()
+     {
+          RenderFieldPos = new PointF(FieldPos.X, FieldPos.Y);
+     }
+
+     public void UpdateRenderPosition(float smoothing = 0.18f)
+     {
+          var target = new PointF(FieldPos.X, FieldPos.Y);
+          RenderFieldPos = new PointF(
+               RenderFieldPos.X + (target.X - RenderFieldPos.X) * smoothing,
+               RenderFieldPos.Y + (target.Y - RenderFieldPos.Y) * smoothing
+          );
+
+          if (Math.Abs(target.X - RenderFieldPos.X) < 0.01f && Math.Abs(target.Y - RenderFieldPos.Y) < 0.01f)
+          {
+               RenderFieldPos = target;
+          }
      }
 
      public void TryMove(int deltaX, int deltaY, Game game)
@@ -67,10 +87,9 @@ public class Player
           IsAttacking = false;
           AttackTarget = new Point(-1, -1);
      }
+
      public bool IsRushReady()
      {
-          if (RushCooldown ==0)
-               return true;
-          return false;
+          return RushCooldown == 0;
      }
 }

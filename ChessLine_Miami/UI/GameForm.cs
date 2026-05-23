@@ -1,6 +1,7 @@
 using ChessLine_Miami.Models;
 using ChessLine_Miami.Presenters;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -58,16 +59,20 @@ public partial class GameForm : Form, IGameView
         _animationTimer.Interval = 16; // 60 кадров в секунду 
         _animationTimer.Tick += (s, e) => 
     {
-        // Принудительно обновляем только интерфейс
+        _gamePresenter?.UpdateAnimations();
+        UpdateCameraOffset();
         this.Invalidate(); 
     };
     _animationTimer.Start();
     }
 
+    private PointF _currentCameraOffsetF;
+
     public void SetPresenter(GamePresenter presenter)
     {
         _gamePresenter = presenter;
-        CameraOffset=_gamePresenter.GetCameraOffset(this.ClientSize);
+        _currentCameraOffsetF = _gamePresenter.GetCameraOffsetF(this.ClientSize);
+        CameraOffset = new Point((int)Math.Round(_currentCameraOffsetF.X), (int)Math.Round(_currentCameraOffsetF.Y));
     }
 
     public void SetGame(Game game)
@@ -171,7 +176,18 @@ public partial class GameForm : Form, IGameView
     {
         if (_gamePresenter != null && _game != null)
         {
-            CameraOffset = _gamePresenter.GetCameraOffset(this.ClientSize);
+            var target = _gamePresenter.GetCameraOffsetF(this.ClientSize);
+            _currentCameraOffsetF = new PointF(
+                _currentCameraOffsetF.X + (target.X - _currentCameraOffsetF.X) * 0.18f,
+                _currentCameraOffsetF.Y + (target.Y - _currentCameraOffsetF.Y) * 0.18f
+            );
+
+            if (Math.Abs(target.X - _currentCameraOffsetF.X) < 0.5f)
+                _currentCameraOffsetF.X = target.X;
+            if (Math.Abs(target.Y - _currentCameraOffsetF.Y) < 0.5f)
+                _currentCameraOffsetF.Y = target.Y;
+
+            CameraOffset = new Point((int)Math.Round(_currentCameraOffsetF.X), (int)Math.Round(_currentCameraOffsetF.Y));
         }
     }
 

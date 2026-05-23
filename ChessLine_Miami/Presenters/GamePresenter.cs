@@ -1,6 +1,7 @@
 using ChessLine_Miami.Models;
 using ChessLine_Miami.UI;
 using ChessLine_Miami.Logic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Media;
 
@@ -87,13 +88,25 @@ public class GamePresenter
         return true;
     }
 
-    public Point GetCameraOffset(Size screenSize)
+    
+
+    public PointF GetCameraOffsetF(Size screenSize)
     {
         var cellSize = _constants.CellSize;
-        var playerPixelPos = new Point(Player.FieldPos.X * cellSize, Player.FieldPos.Y * cellSize);
-        var offsetX = screenSize.Width / 2 - playerPixelPos.X - cellSize / 2;
-        var offsetY = screenSize.Height / 2 - playerPixelPos.Y - cellSize / 2;
-        return new Point(offsetX, offsetY);
+        var playerPixelPosX = Player.RenderFieldPos.X * cellSize;
+        var playerPixelPosY = Player.RenderFieldPos.Y * cellSize;
+        var offsetX = screenSize.Width / 2f - playerPixelPosX - cellSize / 2f;
+        var offsetY = screenSize.Height / 2f - playerPixelPosY - cellSize / 2f;
+        return new PointF(offsetX, offsetY);
+    }
+
+    public void UpdateAnimations()
+    {
+        _game.Player.UpdateRenderPosition();
+        foreach (var enemy in _game.Enemies)
+        {
+            enemy.UpdateRenderPosition();
+        }
     }
 
     public void UpdateAttackPreview(int mouseX, int mouseY)

@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.IO;
 using ChessLine_Miami.Models;
 using ChessLine_Miami.Presenters;
@@ -17,7 +18,7 @@ public class EnemiesViewer
         var cellSize = _constants.CellSize;
         foreach (var enemy in enemies)
         {
-            var enemyRect = new Rectangle(enemy.Pos.X * cellSize + cameraOffset.X, enemy.Pos.Y * cellSize + cameraOffset.Y, cellSize, cellSize);
+            var enemyRect = new RectangleF(enemy.RenderFieldPos.X * cellSize + cameraOffset.X, enemy.RenderFieldPos.Y * cellSize + cameraOffset.Y, cellSize, cellSize);
             if (!enemy.IsAlive)
             {
                 g.DrawImage(bloodImg, enemyRect);

@@ -39,6 +39,7 @@ static class Program
 
         var mediaPlayer = new MediaPlayer();
         mediaPlayer.Open(new Uri(musicPath));
+        mediaPlayer.Volume = 0.3; 
         mediaPlayer.Play();
         // Создаем форму
         Form = new GameForm();
