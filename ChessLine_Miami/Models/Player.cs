@@ -5,6 +5,7 @@ namespace ChessLine_Miami.Models;
 
 public class Player
 {
+     public const float FrameUpdateSpeed = 0.20f;
      public Point FieldPos;
      public PointF RenderFieldPos;
      public bool IsAlive;
@@ -31,7 +32,7 @@ public class Player
           RenderFieldPos = new PointF(FieldPos.X, FieldPos.Y);
      }
 
-     public void UpdateRenderPosition(float smoothing = 0.18f)
+     public void UpdateRenderPosition(float smoothing = FrameUpdateSpeed)
      {
           var target = new PointF(FieldPos.X, FieldPos.Y);
           RenderFieldPos = new PointF(

@@ -25,7 +25,7 @@ public class Enemy
         RenderFieldPos = new PointF(Pos.X, Pos.Y);
     }
 
-    public void UpdateRenderPosition(float smoothing = 0.18f)
+    public void UpdateRenderPosition(float smoothing = Player.FrameUpdateSpeed)
     {
         var target = new PointF(Pos.X, Pos.Y);
         RenderFieldPos = new PointF(

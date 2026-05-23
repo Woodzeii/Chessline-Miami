@@ -12,6 +12,7 @@ class _constants{
 
 public partial class GameForm : Form, IGameView
 {
+    public const float FrameUpdateSpeed = 0.20f;
     private System.Windows.Forms.Timer _animationTimer;
     public PlayerViewer PlayerViewer { get; }
     public LevelViewer LevelViewer { get; }
@@ -56,7 +57,7 @@ public partial class GameForm : Form, IGameView
         this.MouseEnter += (s, e) => IsMouseOverForm = true;
         this.MouseLeave += (s, e) => { IsMouseOverForm = false; _gamePresenter?.ClearAttack(); };
         _animationTimer = new System.Windows.Forms.Timer();
-        _animationTimer.Interval = 16; // 60 кадров в секунду 
+        _animationTimer.Interval = 20; // 50 FPS
         _animationTimer.Tick += (s, e) => 
     {
         _gamePresenter?.UpdateAnimations();
@@ -178,8 +179,8 @@ public partial class GameForm : Form, IGameView
         {
             var target = _gamePresenter.GetCameraOffsetF(this.ClientSize);
             _currentCameraOffsetF = new PointF(
-                _currentCameraOffsetF.X + (target.X - _currentCameraOffsetF.X) * 0.18f,
-                _currentCameraOffsetF.Y + (target.Y - _currentCameraOffsetF.Y) * 0.18f
+                _currentCameraOffsetF.X + (target.X - _currentCameraOffsetF.X) * FrameUpdateSpeed,
+                _currentCameraOffsetF.Y + (target.Y - _currentCameraOffsetF.Y) * FrameUpdateSpeed
             );
 
             if (Math.Abs(target.X - _currentCameraOffsetF.X) < 0.5f)
