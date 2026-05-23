@@ -15,11 +15,14 @@ public class MenuViewer
     // Game states
     public bool IsPaused { get;  set; }
     public bool IsShowingTutorial { get;  set; }
+    public bool IsShowingLevelComplete { get; set; }
     public int TutorialImageIndex { get;  set; } // 0 = WalkGuide, 1 = AttackGuide
     public Rectangle _tutorialButtonRect;
     public Rectangle _pauseResumeButtonRect;
     public Rectangle _pauseRestartButtonRect;
     public Rectangle _pauseExitButtonRect;
+    public Rectangle _levelCompleteNextButtonRect;
+    public Rectangle _levelCompleteMenuButtonRect;
     
     // Главное меню
     public void DrawMainMenu(Graphics g, Form form)
@@ -154,6 +157,64 @@ public class MenuViewer
             DrawButton(g, _pauseExitButtonRect, "Exit Game");
         }
     
+    // Экран завершения уровня
+    public void DrawLevelCompleteScreen(Graphics g, Form form, LevelStats stats)
+    {
+        // Фон
+        using var dimBrush = new SolidBrush(Color.FromArgb(200, 0, 0, 0));
+        g.FillRectangle(dimBrush, form.ClientRectangle);
+
+        var menuWidth = 500;
+        var menuHeight = 450;
+        var menuX = (form.ClientSize.Width - menuWidth) / 2;
+        var menuY = (form.ClientSize.Height - menuHeight) / 2;
+
+        using var menuBrush = new SolidBrush(Color.FromArgb(50, 50, 80));
+        using var menuPen = new Pen(Color.White, 3);
+        g.FillRectangle(menuBrush, menuX, menuY, menuWidth, menuHeight);
+        g.DrawRectangle(menuPen, menuX, menuY, menuWidth, menuHeight);
+
+        using var titleFont = new Font("Arial", 28, FontStyle.Bold);
+        g.DrawString("LEVEL COMPLETE!", titleFont, Brushes.Gold, menuX + 80, menuY + 20);
+
+        var startY = menuY + 100;
+        using var statsFont = new Font("Arial", 14, FontStyle.Bold);
+        using var statsValueFont = new Font("Arial", 14, FontStyle.Regular);
+
+        // Время
+        g.DrawString("Time:", statsFont, Brushes.White, menuX + 50, startY);
+        g.DrawString($"{stats.TimeSeconds}s", statsValueFont, Brushes.LimeGreen, menuX + 250, startY);
+        startY += 40;
+
+        // Килы в комбо
+        g.DrawString("Best Combo:", statsFont, Brushes.White, menuX + 50, startY);
+        g.DrawString($"{stats.ComboKills} kills", statsValueFont, Brushes.LimeGreen, menuX + 250, startY);
+        startY += 40;
+
+        // Всего килов
+        g.DrawString("Total Kills:", statsFont, Brushes.White, menuX + 50, startY);
+        g.DrawString($"{stats.TotalKills}", statsValueFont, Brushes.LimeGreen, menuX + 250, startY);
+        startY += 60;
+
+        // Оценка
+        using var ratingFont = new Font("Arial", 32, FontStyle.Bold);
+        var ratingSize = g.MeasureString(stats.RatingText, ratingFont);
+        g.DrawString(stats.RatingText, ratingFont, Brushes.Gold,
+            menuX + (menuWidth - ratingSize.Width) / 2, startY);
+
+        // Кнопки
+        var buttonWidth = 150;
+        var buttonHeight = 40;
+        var buttonY = menuY + menuHeight - 80;
+
+        // Кнопка "Далее"
+        _levelCompleteNextButtonRect = new Rectangle(menuX + 50, buttonY, buttonWidth, buttonHeight);
+        DrawButton(g, _levelCompleteNextButtonRect, "Next");
+
+        // Кнопка "Меню"
+        _levelCompleteMenuButtonRect = new Rectangle(menuX + menuWidth - buttonWidth - 50, buttonY, buttonWidth, buttonHeight);
+        DrawButton(g, _levelCompleteMenuButtonRect, "Menu");
+    }
 
     private void DrawButton(Graphics g, Rectangle rect, string text)
     {

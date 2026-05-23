@@ -11,6 +11,13 @@ public class Game
     public event Action OnFinished;
 
     public int Score { get; set; }
+    
+    // Статистика уровня
+    public DateTime LevelStartTime { get; set; }
+    public LevelStats Stats { get; set; }
+    public int ComboCount { get; set; }
+    public DateTime LastKillTime { get; set; }
+    public const int ComboTimeLimit = 10; // 10 секунд для комбо
 
     public void FinishLevel()
     {
@@ -26,6 +33,12 @@ public class Game
             .ToList();
         IsPaused = false;
         Score = 0;
+        
+        // Инициализируем статистику
+        LevelStartTime = DateTime.Now;
+        Stats = new LevelStats();
+        ComboCount = 0;
+        LastKillTime = DateTime.Now;
     }
     
     public void Restart()
@@ -35,6 +48,15 @@ public class Game
             .Select((enemy) => new Enemy(enemy.Pos, enemy.Type))
             .ToList();
     }
+    public void LoadLevel()
+    {
+        // Сбросим статистику
+        LevelStartTime = DateTime.Now;
+        Stats = new LevelStats();
+        ComboCount = 0;
+        LastKillTime = DateTime.Now;
+        Restart();
+    }
 
     public bool IsLevelFinished()
     {
@@ -43,5 +65,30 @@ public class Game
             return true;
         }
         return false;
+    }
+    
+    public void RegisterKill()
+    {
+        var timeSinceLastKill = (DateTime.Now - LastKillTime).TotalSeconds;
+        
+        // Если килл в пределах 10 секунд - продлеваем комбо
+        if (timeSinceLastKill < ComboTimeLimit)
+        {
+            ComboCount++;
+        }
+        else
+        {
+            ComboCount = 1; // Начинаем новое комбо
+        }
+        
+        LastKillTime = DateTime.Now;
+        Stats.TotalKills++;
+        Stats.ComboKills = Math.Max(Stats.ComboKills, ComboCount);
+    }
+    
+    public void FinalizeStats()
+    {
+        Stats.TimeSeconds = (int)(DateTime.Now - LevelStartTime).TotalSeconds;
+        Stats.CalculateRating();
     }
 }

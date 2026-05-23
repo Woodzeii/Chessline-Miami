@@ -6,6 +6,7 @@ public interface IGameView
     EnemiesViewer EnemiesViewer { get; }
     LevelViewer LevelViewer { get; }
     PlayerViewer PlayerViewer { get; }
+    MenuViewer MenuViewer { get; }
 
     // Событие: Форма просто говорит, что нажата клавиша
     event Action<Keys> KeyPressed;
@@ -17,5 +18,6 @@ public interface IGameView
     void SetGame(Game game);
 
     void Redraw(); // Просто вызов Invalidate()
+    void OnLevelComplete(); // Показать экран результатов
     
 }

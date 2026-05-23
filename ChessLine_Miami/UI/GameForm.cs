@@ -86,15 +86,15 @@ public partial class GameForm : Form, IGameView
     {
         if (e.KeyCode == Keys.Escape)
         {
-            if (MenuViewer.IsShowingMainMenu)
-                return; // Не обрабатываем Escape в главном меню
+            if (MenuViewer.IsShowingMainMenu || MenuViewer.IsShowingLevelComplete)
+                return; // Не обрабатываем Escape в главном меню и экране результатов
             
             MenuViewer.IsPaused = !MenuViewer.IsPaused;
             e.Handled = true;
             return;
         }
 
-        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial)
+        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial || MenuViewer.IsShowingLevelComplete)
             return;
 
         if (e.KeyCode == Keys.R)
@@ -115,7 +115,7 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_MouseMove(object sender, MouseEventArgs e)
     {
-        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial)
+        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial || MenuViewer.IsShowingLevelComplete)
             return;
 
         if (_gamePresenter != null && _game?.Player != null)
@@ -130,6 +130,24 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_MouseClick(object sender, MouseEventArgs e)
     {
+        // Экран завершения уровня
+        if (MenuViewer.IsShowingLevelComplete)
+        {
+            if (MenuViewer._levelCompleteNextButtonRect.Contains(e.Location))
+            {
+                MenuViewer.IsShowingLevelComplete = false;
+                // Переходим на следующий уровень
+                _gamePresenter?.OnLevelComplete();
+            }
+            else if (MenuViewer._levelCompleteMenuButtonRect.Contains(e.Location))
+            {
+                _gamePresenter?.OnLevelComplete();
+                MenuViewer.IsShowingLevelComplete = false;
+                MenuViewer.IsShowingMainMenu = true;
+            }
+            return;
+        }
+
         // Главное меню
         if (MenuViewer.IsShowingMainMenu)
         {
@@ -137,6 +155,7 @@ public partial class GameForm : Form, IGameView
             {
                 MenuViewer.IsShowingMainMenu = false;
                 _gamePresenter?.StartNewGame();
+                this.Invalidate();
             }
             else if (MenuViewer._mainMenuRoomsButtonRect.Contains(e.Location))
             {
@@ -231,6 +250,13 @@ public partial class GameForm : Form, IGameView
             MenuViewer.DrawMainMenu(g, this);
             return;
         }
+
+        // Экран завершения уровня
+        if (MenuViewer.IsShowingLevelComplete)
+        {
+            MenuViewer.DrawLevelCompleteScreen(g, this, _game?.Stats);
+            return;
+        }
         
         if (_game?.Level != null)
             LevelViewer.DrawLevel(g, _game.Level, CameraOffset);
@@ -267,4 +293,10 @@ public partial class GameForm : Form, IGameView
         }
     }
 
+    public void OnLevelComplete()
+    {
+        // Показываем экран результатов
+        MenuViewer.IsShowingLevelComplete = true;
+        this.Invalidate();
+    }
 }

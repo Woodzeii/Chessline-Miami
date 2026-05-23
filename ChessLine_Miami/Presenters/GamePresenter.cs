@@ -31,6 +31,11 @@ public class GamePresenter
     public void StartNewGame()
     {
         _game.Restart();
+        // Сбросим статистику
+        _game.LevelStartTime = DateTime.Now;
+        _game.Stats = new LevelStats();
+        _game.ComboCount = 0;
+        _game.LastKillTime = DateTime.Now;
         _view.SetGame(_game);
         
     }
@@ -38,6 +43,7 @@ public class GamePresenter
     public void RestartLevel()
     {
         _game.Restart();
+        
         _view.Redraw();
     }
 
@@ -46,9 +52,10 @@ public class GamePresenter
         if (await EndIfDead()) return;
         if (_game.IsLevelFinished())
         {
-            MessageBox.Show("Level completed! Starting next level.");
-            await Task.Delay(500);
-            _game.FinishLevel();
+            // Завершаем статистику
+            _game.FinalizeStats();
+            // Показываем экран результатов через MenuViewer
+            _view.OnLevelComplete();
             return;
         }
         var moved = _playerPresenter.WASD(e, isRush);
@@ -72,7 +79,7 @@ public class GamePresenter
         if (!_game.Player.IsAlive)        {
             MessageBox.Show("You died! Starting new game.");
             await Task.Delay(500);
-            StartNewGame();
+            RestartLevel();
             return true;
         }
 
@@ -139,13 +146,16 @@ public class GamePresenter
         {
             foreach (var enemy in _game.Enemies.Where(e=>e.Pos == player.AttackTarget))
             {
-                enemy.Kill();
-
+                if (enemy.IsAlive)
+                {
+                    enemy.Kill();
+                    _game.RegisterKill(); // Регистрируем килл для комбо
                 var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/hotline-miami-hit.wav"); 
 
                         var mediaPlayer = new MediaPlayer();
                         mediaPlayer.Open(new Uri(musicPath));
                         mediaPlayer.Play();
+                }
 
 
              
@@ -165,6 +175,12 @@ public class GamePresenter
     {
         _game.Player.ClearAttack();
         _view.Redraw();
+    }
+
+    public void OnLevelComplete()
+    {
+        // Переход на следующий уровень
+        _game.FinishLevel();
     }
     
     public Player Player => _game.Player;
