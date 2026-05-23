@@ -5,6 +5,14 @@ using System.IO;
 
 public class MenuViewer
 {
+    // Main Menu
+    public bool IsShowingMainMenu { get; set; } = true;
+    public Rectangle _mainMenuStartButtonRect;
+    public Rectangle _mainMenuRoomsButtonRect;
+    public Rectangle _mainMenuSettingsButtonRect;
+    public Rectangle _mainMenuExitButtonRect;
+
+    // Game states
     public bool IsPaused { get;  set; }
     public bool IsShowingTutorial { get;  set; }
     public int TutorialImageIndex { get;  set; } // 0 = WalkGuide, 1 = AttackGuide
@@ -12,6 +20,64 @@ public class MenuViewer
     public Rectangle _pauseResumeButtonRect;
     public Rectangle _pauseRestartButtonRect;
     public Rectangle _pauseExitButtonRect;
+    
+    // Главное меню
+    public void DrawMainMenu(Graphics g, Form form)
+    {
+        // Фон
+        using var backgroundBrush = new SolidBrush(Color.FromArgb(30, 30, 50));
+        g.FillRectangle(backgroundBrush, form.ClientRectangle);
+
+        var menuWidth = 400;
+        var menuHeight = 400;
+        var menuX = (form.ClientSize.Width - menuWidth) / 2;
+        var menuY = (form.ClientSize.Height - menuHeight) / 2;
+
+        // Рамка меню
+        using var menuBrush = new SolidBrush(Color.FromArgb(50, 50, 80));
+        using var menuPen = new Pen(Color.FromArgb(150, 150, 255), 3);
+        g.FillRectangle(menuBrush, menuX, menuY, menuWidth, menuHeight);
+        g.DrawRectangle(menuPen, menuX, menuY, menuWidth, menuHeight);
+
+        // Заголовок
+        using var titleFont = new Font("Arial", 24, FontStyle.Bold);
+        g.DrawString("CHESSLINE MIAMI", titleFont, Brushes.White, menuX + 50, menuY + 20);
+
+        var buttonWidth = 250;
+        var buttonHeight = 50;
+        var buttonX = menuX + (menuWidth - buttonWidth) / 2;
+
+        // Кнопка "Начать игру"
+        _mainMenuStartButtonRect = new Rectangle(buttonX, menuY + 80, buttonWidth, buttonHeight);
+        DrawMainMenuButton(g, _mainMenuStartButtonRect, "Начать игру");
+
+        // Кнопка "Комнаты"
+        _mainMenuRoomsButtonRect = new Rectangle(buttonX, menuY + 150, buttonWidth, buttonHeight);
+        DrawMainMenuButton(g, _mainMenuRoomsButtonRect, "Комнаты");
+
+        // Кнопка "Настройки"
+        _mainMenuSettingsButtonRect = new Rectangle(buttonX, menuY + 220, buttonWidth, buttonHeight);
+        DrawMainMenuButton(g, _mainMenuSettingsButtonRect, "Настройки");
+
+        // Кнопка "Выйти"
+        _mainMenuExitButtonRect = new Rectangle(buttonX, menuY + 290, buttonWidth, buttonHeight);
+        DrawMainMenuButton(g, _mainMenuExitButtonRect, "Выйти из игры");
+    }
+
+    private void DrawMainMenuButton(Graphics g, Rectangle rect, string text)
+    {
+        using var buttonBrush = new SolidBrush(Color.FromArgb(70, 70, 110));
+        using var buttonPen = new Pen(Color.FromArgb(150, 150, 255), 2);
+        g.FillRectangle(buttonBrush, rect);
+        g.DrawRectangle(buttonPen, rect);
+        
+        using var font = new Font("Arial", 13, FontStyle.Bold);
+        var textSize = g.MeasureString(text, font);
+        g.DrawString(text, font, Brushes.White,
+            rect.X + (rect.Width - textSize.Width) / 2,
+            rect.Y + (rect.Height - textSize.Height) / 2);
+    }
+    
     // Кнопка гайда
         public void DrawTutorialButton(Graphics g, Game game,Form form)
         {

@@ -86,12 +86,15 @@ public partial class GameForm : Form, IGameView
     {
         if (e.KeyCode == Keys.Escape)
         {
+            if (MenuViewer.IsShowingMainMenu)
+                return; // Не обрабатываем Escape в главном меню
+            
             MenuViewer.IsPaused = !MenuViewer.IsPaused;
             e.Handled = true;
             return;
         }
 
-        if (MenuViewer.IsPaused || MenuViewer.IsShowingTutorial)
+        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial)
             return;
 
         if (e.KeyCode == Keys.R)
@@ -112,6 +115,9 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_MouseMove(object sender, MouseEventArgs e)
     {
+        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial)
+            return;
+
         if (_gamePresenter != null && _game?.Player != null)
         {
             var cellSize = _constants.CellSize;
@@ -124,6 +130,29 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_MouseClick(object sender, MouseEventArgs e)
     {
+        // Главное меню
+        if (MenuViewer.IsShowingMainMenu)
+        {
+            if (MenuViewer._mainMenuStartButtonRect.Contains(e.Location))
+            {
+                MenuViewer.IsShowingMainMenu = false;
+                _gamePresenter?.StartNewGame();
+            }
+            else if (MenuViewer._mainMenuRoomsButtonRect.Contains(e.Location))
+            {
+                MessageBox.Show("Комнаты будут реализованы позже", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (MenuViewer._mainMenuSettingsButtonRect.Contains(e.Location))
+            {
+                MessageBox.Show("Настройки будут реализованы позже", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (MenuViewer._mainMenuExitButtonRect.Contains(e.Location))
+            {
+                this.Close();
+            }
+            return;
+        }
+
         if (MenuViewer.IsShowingTutorial)
         {
             MenuViewer.TutorialImageIndex = (MenuViewer.TutorialImageIndex + 1) % 2;
@@ -145,7 +174,7 @@ public partial class GameForm : Form, IGameView
             }
             else if (MenuViewer._pauseExitButtonRect.Contains(e.Location))
             {
-                this.Close();
+                MenuViewer.IsShowingMainMenu = true;
             }
             return;
         }
@@ -195,6 +224,13 @@ public partial class GameForm : Form, IGameView
     private void OnPaint(object sender, PaintEventArgs e)
     {
         Graphics g = e.Graphics;
+        
+        // Главное меню
+        if (MenuViewer.IsShowingMainMenu)
+        {
+            MenuViewer.DrawMainMenu(g, this);
+            return;
+        }
         
         if (_game?.Level != null)
             LevelViewer.DrawLevel(g, _game.Level, CameraOffset);
