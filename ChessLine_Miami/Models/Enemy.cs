@@ -73,26 +73,4 @@ public class Enemy
     {
         IsAlive = false;
     }
-
-    public void Move(Player player, Level level)
-    {
-        switch (Type)
-        {
-            case EnemyType.Rook:
-                // Логика движения ладьи
-                break;
-            case EnemyType.Bishop:
-                // Логика движения слона
-                break;
-            case EnemyType.Queen:
-                // Логика движения ферзя (комбинация ладьи и слона)
-                break;
-            case EnemyType.Knight:
-                // Логика движения коня
-                break;
-            case EnemyType.Pawn:
-                // Логика движения пешки 
-                break;
-        }
-    }
 }
