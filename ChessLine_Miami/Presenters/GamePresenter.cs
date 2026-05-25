@@ -4,7 +4,7 @@ using ChessLine_Miami.Logic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media;
-
+using NAudio.Wave;
 using System;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
@@ -144,6 +144,7 @@ public class GamePresenter
         // Only allow diagonal attacks
         if (dx == dy && dx == 1)
         {
+            bool IsHitten = false;
             foreach (var enemy in _game.Enemies.Where(e=>e.Pos == player.AttackTarget))
             {
                 if (enemy.IsAlive)
@@ -164,12 +165,20 @@ public class GamePresenter
                     _enemiesPresenter.UpdateEnemies();
                     System.Diagnostics.Debug.WriteLine($"=== Enemies after update: {_game.Enemies.Count} ===");
                     _view.Redraw();
+                    IsHitten = true;
                 }
-
-
-             
             }
-            
+            if (!IsHitten)
+            {
+                var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/hotline-miami-hit.wav"); 
+
+                    // var mediaPlayer = new MediaPlayer();
+                    // mediaPlayer.Open(new Uri(musicPath));
+                    // mediaPlayer.Play();
+                     var sfx = new SFX();
+                     sfx.PlayMp3(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/slow-swing.mp3"));
+                
+            }
         }
     }
 
