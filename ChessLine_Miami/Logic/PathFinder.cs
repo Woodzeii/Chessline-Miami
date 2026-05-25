@@ -5,7 +5,7 @@ namespace ChessLine_Miami.Logic;
 public static class PathFinder
 {
    
-
+    const int MaxSeenDistance = 10;
     public static bool IsPlayerSeen(Player player, Enemy enemy, Level level)
     {
         //Алгоритм Брезенхема
@@ -22,6 +22,10 @@ public static class PathFinder
 
         int x = x0;
         int y = y0;
+        if (Math.Sqrt(dx * dx + dy * dy) >= MaxSeenDistance)
+        {
+            return false;
+        }
 
         while (true)
         {

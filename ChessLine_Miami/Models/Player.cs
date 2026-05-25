@@ -51,7 +51,17 @@ public class Player
           TryMove(deltaX, deltaY, game, 1);
      }
 
-     public void TryMove(int deltaX, int deltaY, Game game, int steps)
+     public bool TryMoveOnPoint(Point newPos, Game game)
+     {
+          if (CollisionDetector.CanMoveTo(newPos, game))
+          {
+                FieldPos = newPos;
+                return true;
+          }
+          return false;
+     }
+
+     public bool TryMove(int deltaX, int deltaY, Game game, int steps)
      {
           if (steps <= 1)
           {
@@ -59,8 +69,9 @@ public class Player
                if (CollisionDetector.CanMoveTo(newPos, game))
                {
                     FieldPos = newPos;
+                    return true;
                }
-               return;
+               return false;
           }
 
           var currentPos = FieldPos;
@@ -69,12 +80,13 @@ public class Player
                var nextPos = new Point(currentPos.X + deltaX, currentPos.Y + deltaY);
                if (!CollisionDetector.CanMoveTo(nextPos, game))
                {
-                    return;
+                    return false;
                }
                currentPos = nextPos;
           }
 
           FieldPos = currentPos;
+          return false;
      }
 
      public void SetAttackTarget(Point target)

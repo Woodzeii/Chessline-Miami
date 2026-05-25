@@ -150,24 +150,26 @@ public class GamePresenter
                 {
                     enemy.Kill();
                     _game.RegisterKill(); // Регистрируем килл для комбо
-                var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/hotline-miami-hit.wav"); 
+                    var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/hotline-miami-hit.wav"); 
 
-                        var mediaPlayer = new MediaPlayer();
-                        mediaPlayer.Open(new Uri(musicPath));
-                        mediaPlayer.Play();
+                    var mediaPlayer = new MediaPlayer();
+                    mediaPlayer.Open(new Uri(musicPath));
+                    mediaPlayer.Play();
+                    player.TryMoveOnPoint(player.AttackTarget, _game);
+                    EndIfDead(); // Проверяем, не умер ли игрок от контратаки
+                    System.Diagnostics.Debug.WriteLine($"Attack at ({targetX}, {targetY})");
+                    player.ClearAttack();
+                    await Task.Delay(300);
+                    System.Diagnostics.Debug.WriteLine("=== Updating enemies ===");
+                    _enemiesPresenter.UpdateEnemies();
+                    System.Diagnostics.Debug.WriteLine($"=== Enemies after update: {_game.Enemies.Count} ===");
+                    _view.Redraw();
                 }
 
 
              
             }
-            EndIfDead(); // Проверяем, не умер ли игрок от контратаки
-            System.Diagnostics.Debug.WriteLine($"Attack at ({targetX}, {targetY})");
-            player.ClearAttack();
-            await Task.Delay(300);
-            System.Diagnostics.Debug.WriteLine("=== Updating enemies ===");
-            _enemiesPresenter.UpdateEnemies();
-            System.Diagnostics.Debug.WriteLine($"=== Enemies after update: {_game.Enemies.Count} ===");
-            _view.Redraw();
+            
         }
     }
 

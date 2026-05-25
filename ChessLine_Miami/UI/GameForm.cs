@@ -130,6 +130,51 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_MouseClick(object sender, MouseEventArgs e)
     {
+        // Экран настроек
+        if (MenuViewer.IsShowingSettings)
+        {
+            // Кнопка уменьшения громкости
+            if (MenuViewer._volumeDecreaseButtonRect.Contains(e.Location))
+            {
+                Program.PlayerProgress.Volume = Math.Max(0, Program.PlayerProgress.Volume - 0.1);
+                Program.PlayerProgress.SaveProgress();
+                Program.UpdateVolume();
+                this.Invalidate();
+                return;
+            }
+
+            // Кнопка увеличения громкости
+            if (MenuViewer._volumeIncreaseButtonRect.Contains(e.Location))
+            {
+                Program.PlayerProgress.Volume = Math.Min(1.0, Program.PlayerProgress.Volume + 0.1);
+                Program.PlayerProgress.SaveProgress();
+                Program.UpdateVolume();
+                this.Invalidate();
+                return;
+            }
+
+            // Клик на слайдер громкости
+            if (MenuViewer._volumeSliderRect.Contains(e.Location))
+            {
+                var sliderRelativeX = e.X - MenuViewer._volumeSliderRect.X;
+                Program.PlayerProgress.Volume = Math.Max(0, Math.Min(1.0, (double)sliderRelativeX / MenuViewer._volumeSliderRect.Width));
+                Program.PlayerProgress.SaveProgress();
+                Program.UpdateVolume();
+                this.Invalidate();
+                return;
+            }
+
+            // Кнопка "Назад"
+            if (MenuViewer._settingsBackButtonRect.Contains(e.Location))
+            {
+                MenuViewer.IsShowingSettings = false;
+                MenuViewer.IsShowingMainMenu = true;
+                this.Invalidate();
+                return;
+            }
+            return;
+        }
+
         // Экран выбора уровней
         if (MenuViewer.IsShowingLevelSelection)
         {
@@ -191,7 +236,9 @@ public partial class GameForm : Form, IGameView
             }
             else if (MenuViewer._mainMenuSettingsButtonRect.Contains(e.Location))
             {
-                MessageBox.Show("Настройки будут реализованы позже", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MenuViewer.IsShowingMainMenu = false;
+                MenuViewer.IsShowingSettings = true;
+                this.Invalidate();
             }
             else if (MenuViewer._mainMenuExitButtonRect.Contains(e.Location))
             {
@@ -276,6 +323,13 @@ public partial class GameForm : Form, IGameView
         if (MenuViewer.IsShowingMainMenu)
         {
             MenuViewer.DrawMainMenu(g, this);
+            return;
+        }
+
+        // Экран настроек
+        if (MenuViewer.IsShowingSettings)
+        {
+            MenuViewer.DrawSettingsScreen(g, this, Program.PlayerProgress);
             return;
         }
 

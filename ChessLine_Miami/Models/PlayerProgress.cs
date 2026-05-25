@@ -60,6 +60,9 @@ public class PlayerProgress
     [JsonPropertyName("currentLevelIndex")]
     public int CurrentLevelIndex { get; set; } = 0;
 
+    [JsonPropertyName("volume")]
+    public double Volume { get; set; } = 0.3;
+
     public static string GetProgressFilePath()
     {
         var appDataPath = Path.Combine(

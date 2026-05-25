@@ -23,6 +23,7 @@ static class Program
 
     static GameForm Form;
     public static PlayerProgress PlayerProgress { get; set; }
+    private static MediaPlayer mediaPlayer;
 
     /// <summary>
     ///  The main entry point for the application.
@@ -38,15 +39,23 @@ static class Program
         
         var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Music/Ambient.wav"); 
 
-        var mediaPlayer = new MediaPlayer();
+        mediaPlayer = new MediaPlayer();
         mediaPlayer.Open(new Uri(musicPath));
-        mediaPlayer.Volume = 0.3; 
+        mediaPlayer.Volume = PlayerProgress.Volume;
         mediaPlayer.Play();
         
         // Создаем форму
         Form = new GameForm();
 
         Application.Run(Form);
+    }
+
+    public static void UpdateVolume()
+    {
+        if (mediaPlayer != null)
+        {
+            mediaPlayer.Volume = PlayerProgress.Volume;
+        }
     }
 
     public static void LoadLevel(int levelIndex)

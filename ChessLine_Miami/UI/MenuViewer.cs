@@ -1,6 +1,7 @@
 using ChessLine_Miami.Models;
 using ChessLine_Miami.Presenters;
 using System.IO;
+using NAudio.Wave;
 
 
 public class MenuViewer
@@ -8,10 +9,17 @@ public class MenuViewer
     // Main Menu
     public bool IsShowingMainMenu { get; set; } = true;
     public bool IsShowingLevelSelection { get; set; }
+    public bool IsShowingSettings { get; set; }
     public Rectangle _mainMenuStartButtonRect;
     public Rectangle _mainMenuRoomsButtonRect;
     public Rectangle _mainMenuSettingsButtonRect;
     public Rectangle _mainMenuExitButtonRect;
+
+    // Settings
+    public Rectangle _settingsBackButtonRect;
+    public Rectangle _volumeSliderRect;
+    public Rectangle _volumeDecreaseButtonRect;
+    public Rectangle _volumeIncreaseButtonRect;
 
     // Level Selection
     public List<Rectangle> _levelButtonRects = new();
@@ -272,7 +280,7 @@ public class MenuViewer
 
             // Текст уровня
             using var levelFont = new Font("Arial", 14, FontStyle.Bold);
-            string levelText = $"Level {i + 1}";
+            string levelText = $"Уровень {i + 1}";
             var textSize = g.MeasureString(levelText, levelFont);
             g.DrawString(levelText, levelFont, Brushes.White,
                 rect.X + (rect.Width - textSize.Width) / 2,
@@ -291,7 +299,7 @@ public class MenuViewer
             else if (!canPlay)
             {
                 using var lockFont = new Font("Arial", 12, FontStyle.Bold);
-                g.DrawString("LOCKED", lockFont, Brushes.Red,
+                g.DrawString("ЗАКРЫТО", lockFont, Brushes.Red,
                     rect.X + (rect.Width - 50) / 2,
                     rect.Y + 25);
             }
@@ -299,7 +307,66 @@ public class MenuViewer
 
         // Кнопка "Назад"
         _levelSelectionBackButtonRect = new Rectangle(screenWidth - 150, screenHeight - 50, 100, 40);
-        DrawButton(g, _levelSelectionBackButtonRect, "Back");
+        DrawButton(g, _levelSelectionBackButtonRect, "Назад");
+    }
+
+    // Экран настроек
+    public void DrawSettingsScreen(Graphics g, Form form, PlayerProgress playerProgress)
+    {
+        // Фон
+        using var backgroundBrush = new SolidBrush(Color.FromArgb(30, 30, 50));
+        g.FillRectangle(backgroundBrush, form.ClientRectangle);
+
+        var menuWidth = 500;
+        var menuHeight = 350;
+        var menuX = (form.ClientSize.Width - menuWidth) / 2;
+        var menuY = (form.ClientSize.Height - menuHeight) / 2;
+
+        // Рамка меню
+        using var menuBrush = new SolidBrush(Color.FromArgb(50, 50, 80));
+        using var menuPen = new Pen(Color.FromArgb(150, 150, 255), 3);
+        g.FillRectangle(menuBrush, menuX, menuY, menuWidth, menuHeight);
+        g.DrawRectangle(menuPen, menuX, menuY, menuWidth, menuHeight);
+
+        // Заголовок
+        using var titleFont = new Font("Arial", 24, FontStyle.Bold);
+        g.DrawString("НАСТРОЙКИ", titleFont, Brushes.White, menuX + 150, menuY + 20);
+
+        // Громкость
+        using var labelFont = new Font("Arial", 14, FontStyle.Bold);
+        g.DrawString("Громкость:", labelFont, Brushes.White, menuX + 40, menuY + 100);
+
+        // Кнопка уменьшения громкости
+        _volumeDecreaseButtonRect = new Rectangle(menuX + 40, menuY + 140, 50, 40);
+        DrawButton(g, _volumeDecreaseButtonRect, "-");
+
+        // Слайдер громкости
+        var sliderX = menuX + 100;
+        var sliderWidth = 250;
+        _volumeSliderRect = new Rectangle(sliderX, menuY + 150, sliderWidth, 20);
+        
+        using var sliderBrush = new SolidBrush(Color.FromArgb(60, 60, 100));
+        using var sliderPen = new Pen(Color.White, 1);
+        g.FillRectangle(sliderBrush, _volumeSliderRect);
+        g.DrawRectangle(sliderPen, _volumeSliderRect);
+
+        // Ползунок
+        var sliderPos = (int)(_volumeSliderRect.X + _volumeSliderRect.Width * playerProgress.Volume);
+        using var thumbBrush = new SolidBrush(Color.LimeGreen);
+        g.FillRectangle(thumbBrush, sliderPos - 5, _volumeSliderRect.Y - 2, 10, _volumeSliderRect.Height + 4);
+
+        // Кнопка увеличения громкости
+        _volumeIncreaseButtonRect = new Rectangle(menuX + 360, menuY + 140, 50, 40);
+        DrawButton(g, _volumeIncreaseButtonRect, "+");
+
+        // Отображение значения громкости
+        using var valueFont = new Font("Arial", 12, FontStyle.Regular);
+        var volumePercent = (int)(playerProgress.Volume * 100);
+        g.DrawString($"{volumePercent}%", valueFont, Brushes.Yellow, menuX + 420, menuY + 148);
+
+        // Кнопка "Назад"
+        _settingsBackButtonRect = new Rectangle(menuX + (menuWidth - 150) / 2, menuY + 270, 150, 50);
+        DrawButton(g, _settingsBackButtonRect, "Назад");
     }
 
     private void DrawButton(Graphics g, Rectangle rect, string text)

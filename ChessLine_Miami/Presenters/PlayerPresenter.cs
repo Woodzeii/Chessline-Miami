@@ -42,18 +42,18 @@ public class PlayerPresenter
         moved |= MoveOnKey(e, -1, 0, Keys.A, steps);  // A - left
         moved |= MoveOnKey(e, 1, 0, Keys.D, steps);   // D - right
         if (moved)
-    {
-        if (dynamicRushActive)
         {
-            // Рывоr сделан
-            player.RushCooldown = Player.StepsToRush; 
+            if (dynamicRushActive)
+            {
+                // Рывоr сделан
+                player.RushCooldown = Player.StepsToRush; 
+            }
+            else
+            {
+                // Сделан обычный шаг, уменьшаем кулдаун на х..од
+                player.RushCooldown = Math.Max(0, player.RushCooldown - 1);
+            }
         }
-        else
-        {
-            // Сделан обычный шаг, уменьшаем кулдаун на х..од
-            player.RushCooldown = Math.Max(0, player.RushCooldown - 1);
-        }
-    }
 
         return moved;
     }
