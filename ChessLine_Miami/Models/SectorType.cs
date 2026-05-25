@@ -4,7 +4,5 @@ public enum SectorType
 {
     Wall,
     Lava,
-    Enemy,
-    Player,
     Empty
 }

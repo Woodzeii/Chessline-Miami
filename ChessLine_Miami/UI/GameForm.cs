@@ -86,15 +86,15 @@ public partial class GameForm : Form, IGameView
     {
         if (e.KeyCode == Keys.Escape)
         {
-            if (MenuViewer.IsShowingMainMenu || MenuViewer.IsShowingLevelComplete)
-                return; // Не обрабатываем Escape в главном меню и экране результатов
+            if (MenuViewer.IsShowingMainMenu || MenuViewer.IsShowingLevelComplete || MenuViewer.IsShowingLevelSelection)
+                return; // Не обрабатываем Escape в меню
             
             MenuViewer.IsPaused = !MenuViewer.IsPaused;
             e.Handled = true;
             return;
         }
 
-        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial || MenuViewer.IsShowingLevelComplete)
+        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial || MenuViewer.IsShowingLevelComplete || MenuViewer.IsShowingLevelSelection)
             return;
 
         if (e.KeyCode == Keys.R)
@@ -115,7 +115,7 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_MouseMove(object sender, MouseEventArgs e)
     {
-        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial || MenuViewer.IsShowingLevelComplete)
+        if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial || MenuViewer.IsShowingLevelComplete || MenuViewer.IsShowingLevelSelection)
             return;
 
         if (_gamePresenter != null && _game?.Player != null)
@@ -130,6 +130,32 @@ public partial class GameForm : Form, IGameView
 
     private void GameForm_MouseClick(object sender, MouseEventArgs e)
     {
+        // Экран выбора уровней
+        if (MenuViewer.IsShowingLevelSelection)
+        {
+            // Проверяем клик на кнопку "Назад"
+            if (MenuViewer._levelSelectionBackButtonRect.Contains(e.Location))
+            {
+                MenuViewer.IsShowingLevelSelection = false;
+                MenuViewer.IsShowingMainMenu = true;
+                this.Invalidate();
+                return;
+            }
+
+            // Проверяем клик на кнопки уровней
+            for (int i = 0; i < MenuViewer._levelButtonRects.Count; i++)
+            {
+                if (MenuViewer._levelButtonRects[i].Contains(e .Location))
+                {
+                    MenuViewer.IsShowingLevelSelection = false;
+                    Program.LoadLevel(i);
+                    this.Invalidate();
+                    return;
+                }
+            }
+            return;
+        }
+
         // Экран завершения уровня
         if (MenuViewer.IsShowingLevelComplete)
         {
@@ -143,7 +169,7 @@ public partial class GameForm : Form, IGameView
             {
                 _gamePresenter?.OnLevelComplete();
                 MenuViewer.IsShowingLevelComplete = false;
-                MenuViewer.IsShowingMainMenu = true;
+                ShowMainMenu();
             }
             return;
         }
@@ -154,12 +180,14 @@ public partial class GameForm : Form, IGameView
             if (MenuViewer._mainMenuStartButtonRect.Contains(e.Location))
             {
                 MenuViewer.IsShowingMainMenu = false;
-                _gamePresenter?.StartNewGame();
+                Program.LoadNextLevel();
                 this.Invalidate();
             }
             else if (MenuViewer._mainMenuRoomsButtonRect.Contains(e.Location))
             {
-                MessageBox.Show("Комнаты будут реализованы позже", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MenuViewer.IsShowingMainMenu = false;
+                MenuViewer.IsShowingLevelSelection = true;
+                this.Invalidate();
             }
             else if (MenuViewer._mainMenuSettingsButtonRect.Contains(e.Location))
             {
@@ -193,7 +221,7 @@ public partial class GameForm : Form, IGameView
             }
             else if (MenuViewer._pauseExitButtonRect.Contains(e.Location))
             {
-                MenuViewer.IsShowingMainMenu = true;
+                ShowMainMenu();
             }
             return;
         }
@@ -251,6 +279,13 @@ public partial class GameForm : Form, IGameView
             return;
         }
 
+        // Экран выбора уровней
+        if (MenuViewer.IsShowingLevelSelection)
+        {
+            MenuViewer.DrawLevelSelectionScreen(g, this, Program.PlayerProgress);
+            return;
+        }
+
         // Экран завершения уровня
         if (MenuViewer.IsShowingLevelComplete)
         {
@@ -297,6 +332,15 @@ public partial class GameForm : Form, IGameView
     {
         // Показываем экран результатов
         MenuViewer.IsShowingLevelComplete = true;
+        this.Invalidate();
+    }
+
+    public void ShowMainMenu()
+    {
+        MenuViewer.IsShowingMainMenu = true;
+        MenuViewer.IsShowingLevelSelection = false;
+        MenuViewer.IsShowingLevelComplete = false;
+        MenuViewer.IsPaused = false;
         this.Invalidate();
     }
 }

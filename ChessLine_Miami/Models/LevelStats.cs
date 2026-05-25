@@ -21,7 +21,7 @@ public class LevelStats
     {
         // Базовая оценка из времени
         double timeRating = 5.0 - (TimeSeconds / 60.0); // За каждую минуту -1 звёзда
-        timeRating = Math.Max(1, Math.Min(5, timeRating)); // Ограничиваем от 1 до 5
+        timeRating = Math.Max(1, Math.Min(5, timeRating)); // от 1 до 5
 
         // Бонус за комбо
         double comboBonus = (ComboKills / (double)Math.Max(1, TotalKills)) * 0.5; // До +0.5 звёзд за комбо

@@ -7,10 +7,15 @@ public class MenuViewer
 {
     // Main Menu
     public bool IsShowingMainMenu { get; set; } = true;
+    public bool IsShowingLevelSelection { get; set; }
     public Rectangle _mainMenuStartButtonRect;
     public Rectangle _mainMenuRoomsButtonRect;
     public Rectangle _mainMenuSettingsButtonRect;
     public Rectangle _mainMenuExitButtonRect;
+
+    // Level Selection
+    public List<Rectangle> _levelButtonRects = new();
+    public Rectangle _levelSelectionBackButtonRect;
 
     // Game states
     public bool IsPaused { get;  set; }
@@ -214,6 +219,87 @@ public class MenuViewer
         // Кнопка "Меню"
         _levelCompleteMenuButtonRect = new Rectangle(menuX + menuWidth - buttonWidth - 50, buttonY, buttonWidth, buttonHeight);
         DrawButton(g, _levelCompleteMenuButtonRect, "Menu");
+    }
+
+    // Экран выбора уровней
+    public void DrawLevelSelectionScreen(Graphics g, Form form, PlayerProgress playerProgress)
+    {
+        // Фон
+        using var backgroundBrush = new SolidBrush(Color.FromArgb(30, 30, 50));
+        g.FillRectangle(backgroundBrush, form.ClientRectangle);
+
+        var screenWidth = form.ClientSize.Width;
+        var screenHeight = form.ClientSize.Height;
+
+        // Заголовок
+        using var titleFont = new Font("Arial", 28, FontStyle.Bold);
+        g.DrawString("SELECT LEVEL", titleFont, Brushes.Gold, 50, 30);
+
+        // Очищаем старые ректы
+        _levelButtonRects.Clear();
+
+        var buttonWidth = 250;
+        var buttonHeight = 70;
+        var spacing = 20;
+        var startX = 50;
+        var startY = 100;
+
+        // Рисуем кнопки уровней
+        for (int i = 0; i < playerProgress.Levels.Count; i++)
+        {
+            var levelData = playerProgress.Levels[i];
+            int row = i / 2;
+            int col = i % 2;
+
+            var x = startX + col * (buttonWidth + spacing + 50);
+            var y = startY + row * (buttonHeight + spacing);
+
+            var rect = new Rectangle(x, y, buttonWidth, buttonHeight);
+            _levelButtonRects.Add(rect);
+
+            // Определяем цвет кнопки
+            bool canPlay = i == 0 || playerProgress.Levels[i - 1].IsCompleted || i == playerProgress.GetNextUncompletedLevelIndex();
+            bool isCompleted = levelData.IsCompleted;
+
+            Color buttonColor = canPlay
+                ? (isCompleted ? Color.FromArgb(70, 120, 70) : Color.FromArgb(80, 80, 120))
+                : Color.FromArgb(60, 60, 60);
+
+            using var buttonBrush = new SolidBrush(buttonColor);
+            using var buttonPen = new Pen(isCompleted ? Color.Gold : Color.FromArgb(150, 150, 255), 2);
+            g.FillRectangle(buttonBrush, rect);
+            g.DrawRectangle(buttonPen, rect);
+
+            // Текст уровня
+            using var levelFont = new Font("Arial", 14, FontStyle.Bold);
+            string levelText = $"Level {i + 1}";
+            var textSize = g.MeasureString(levelText, levelFont);
+            g.DrawString(levelText, levelFont, Brushes.White,
+                rect.X + (rect.Width - textSize.Width) / 2,
+                rect.Y + 5);
+
+            // Рейтинг и время
+            if (isCompleted)
+            {
+                using var statsFont = new Font("Arial", 10, FontStyle.Regular);
+                string statsText = $"★ {levelData.BestRating:F1} | {levelData.BestTime}s";
+                var statsSize = g.MeasureString(statsText, statsFont);
+                g.DrawString(statsText, statsFont, Brushes.Gold,
+                    rect.X + (rect.Width - statsSize.Width) / 2,
+                    rect.Y + 35);
+            }
+            else if (!canPlay)
+            {
+                using var lockFont = new Font("Arial", 12, FontStyle.Bold);
+                g.DrawString("LOCKED", lockFont, Brushes.Red,
+                    rect.X + (rect.Width - 50) / 2,
+                    rect.Y + 25);
+            }
+        }
+
+        // Кнопка "Назад"
+        _levelSelectionBackButtonRect = new Rectangle(screenWidth - 150, screenHeight - 50, 100, 40);
+        DrawButton(g, _levelSelectionBackButtonRect, "Back");
     }
 
     private void DrawButton(Graphics g, Rectangle rect, string text)

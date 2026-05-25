@@ -10,7 +10,6 @@ namespace ChessLine_Miami;
 
 static class Program
 {
-
     private static int currentLevelIndex = 0;
 
     private static readonly List<Level> levels = new List<Level>
@@ -22,18 +21,20 @@ static class Program
         LevelGenerator.LoadFromStringArray(Levels.AllLevels[4].Split('\n').Where(s => s.Length > 0).ToArray(), "Level5"),
     };
 
-
-
     static GameForm Form;
+    public static PlayerProgress PlayerProgress { get; set; }
+
     /// <summary>
     ///  The main entry point for the application.
     /// </summary>
-    /// 
-    /// 
     [STAThread]
     static void Main()
     {
         ApplicationConfiguration.Initialize();
+        
+        // Загружаем прогресс игрока
+        PlayerProgress = PlayerProgress.LoadProgress();
+        PlayerProgress.InitializeLevels(new List<string> { "StartLevel", "Level2", "Level3", "Level4", "Level5" });
         
         var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Music/Ambient.wav"); 
 
@@ -41,35 +42,55 @@ static class Program
         mediaPlayer.Open(new Uri(musicPath));
         mediaPlayer.Volume = 0.3; 
         mediaPlayer.Play();
+        
         // Создаем форму
         Form = new GameForm();
-
-        // Создаем модель (игру) и презентер, связывая их с формой
-        LoadNextLevel();
 
         Application.Run(Form);
     }
 
-    
-    public static void LoadNextLevel()
+    public static void LoadLevel(int levelIndex)
     {
-        if (currentLevelIndex >= levels.Count)
+        if (levelIndex < 0 || levelIndex >= levels.Count)
+            return;
+
+        // Проверяем, может ли игрок играть этот уровень
+        if (!PlayerProgress.CanPlayLevel(levelIndex))
         {
-            MessageBox.Show("Игра пройдена!");
-            Application.Exit();
+            MessageBox.Show("Вы не можете играть этот уровень. Пройдите предыдущие уровни первыми.", "Недоступен", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
+
+        currentLevelIndex = levelIndex;
         var lvlData = levels[currentLevelIndex];
-        // 2. Создаем новую игру
+        
+        // Создаем новую игру
         var game = new Game(lvlData);
         var presenter = new GamePresenter(game, Form);
 
         game.OnFinished += () => {
-            currentLevelIndex++;
+            // Сохраняем результат уровня
+            PlayerProgress.Levels[currentLevelIndex].UpdateProgress(game.Stats);
+            PlayerProgress.SaveProgress();
+            
+            // Переходим на следующий уровень
             LoadNextLevel(); 
         };
     
         Form.SetPresenter(presenter);
         Form.SetGame(game);
+    }
+
+    public static void LoadNextLevel()
+    {
+        int nextLevelIndex = PlayerProgress.GetNextUncompletedLevelIndex();
+        if (PlayerProgress.Levels[nextLevelIndex].IsCompleted)
+        {
+            // Все уровни пройдены
+            Form.ShowMainMenu();
+            return;
+        }
+        
+        LoadLevel(nextLevelIndex);
     }
 }
