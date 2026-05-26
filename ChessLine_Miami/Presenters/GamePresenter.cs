@@ -170,13 +170,11 @@ public class GamePresenter
             }
             if (!IsHitten)
             {
-                var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/hotline-miami-hit.wav"); 
-
                     // var mediaPlayer = new MediaPlayer();
                     // mediaPlayer.Open(new Uri(musicPath));
                     // mediaPlayer.Play();
-                     var sfx = new SFX();
-                     sfx.PlayMp3(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/slow-swing.mp3"));
+                 var sfx = new SFX();
+                sfx.PlayMp3(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/slow-swing.mp3"));
                 
             }
         }
@@ -190,7 +188,6 @@ public class GamePresenter
 
     public void OnLevelComplete()
     {
-        // Переход на следующий уровень
         _game.FinishLevel();
     }
     

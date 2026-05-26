@@ -41,19 +41,19 @@ public class MenuViewer
     public void DrawMainMenu(Graphics g, Form form)
     {
         // Фон
-        using var backgroundBrush = new SolidBrush(Color.FromArgb(30, 30, 50));
-        g.FillRectangle(backgroundBrush, form.ClientRectangle);
+        // using var backgroundBrush = new SolidBrush(Color.FromArgb(30, 30, 50));
+        // g.FillRectangle(backgroundBrush, form.ClientRectangle);
 
+        string backgroundImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/bgpurple.gif");
+        var _backgroundImage = Image.FromFile(backgroundImagePath);
+        g.DrawImage(_backgroundImage, form.ClientRectangle);
+            
         var menuWidth = 400;
         var menuHeight = 400;
         var menuX = (form.ClientSize.Width - menuWidth) / 2;
         var menuY = (form.ClientSize.Height - menuHeight) / 2;
 
-        // Рамка меню
-        using var menuBrush = new SolidBrush(Color.FromArgb(50, 50, 80));
-        using var menuPen = new Pen(Color.FromArgb(150, 150, 255), 3);
-        g.FillRectangle(menuBrush, menuX, menuY, menuWidth, menuHeight);
-        g.DrawRectangle(menuPen, menuX, menuY, menuWidth, menuHeight);
+        
 
         // Заголовок
         using var titleFont = new Font("Arial", 24, FontStyle.Bold);

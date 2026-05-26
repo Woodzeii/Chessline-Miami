@@ -138,7 +138,7 @@ public partial class GameForm : Form, IGameView
             {
                 Program.PlayerProgress.Volume = Math.Max(0, Program.PlayerProgress.Volume - 0.1);
                 Program.PlayerProgress.SaveProgress();
-                Program.UpdateVolume();
+                SFX.UpdateVolume();
                 this.Invalidate();
                 return;
             }
@@ -148,7 +148,7 @@ public partial class GameForm : Form, IGameView
             {
                 Program.PlayerProgress.Volume = Math.Min(1.0, Program.PlayerProgress.Volume + 0.1);
                 Program.PlayerProgress.SaveProgress();
-                Program.UpdateVolume();
+                SFX.UpdateVolume();
                 this.Invalidate();
                 return;
             }
@@ -159,7 +159,7 @@ public partial class GameForm : Form, IGameView
                 var sliderRelativeX = e.X - MenuViewer._volumeSliderRect.X;
                 Program.PlayerProgress.Volume = Math.Max(0, Math.Min(1.0, (double)sliderRelativeX / MenuViewer._volumeSliderRect.Width));
                 Program.PlayerProgress.SaveProgress();
-                Program.UpdateVolume();
+                SFX.UpdateVolume();
                 this.Invalidate();
                 return;
             }
@@ -395,6 +395,7 @@ public partial class GameForm : Form, IGameView
         MenuViewer.IsShowingLevelSelection = false;
         MenuViewer.IsShowingLevelComplete = false;
         MenuViewer.IsPaused = false;
+        SFX.PlayMenuMusic();
         this.Invalidate();
     }
 }

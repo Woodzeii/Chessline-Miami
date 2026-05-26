@@ -1,12 +1,27 @@
 using System;
 using NAudio.Wave;
 using System.Windows.Forms;
-namespace ChessLine_Miami.Presenters;
+using System.IO;
+using System.Media;
+using System.Windows.Media;
+using ChessLine_Miami.UI;
+using ChessLine_Miami.Presenters;
+using ChessLine_Miami.Models;
+using ChessLine_Miami.Logic;
+using Microsoft.VisualBasic;
+namespace ChessLine_Miami;
+
 public class SFX
 {
+
+    private static MediaPlayer mediaPlayer;
+    public static PlayerProgress PlayerProgress { get; set; }
+
     private WaveOutEvent outputDevice;
     private AudioFileReader audioFile;
 
+
+    #region NAudio Methods
     public void PlayMp3(string filePath)
     {
         try
@@ -43,6 +58,7 @@ public class SFX
             audioFile = null;
         }
     }
+   
 
     
     public void TogglePauseMp3()
@@ -55,4 +71,56 @@ public class SFX
                 outputDevice.Play();
         }
     }
+     #endregion
+
+
+
+    public static void UpdateVolume()
+    {
+        if (mediaPlayer != null)
+        {
+            mediaPlayer.Volume = Program.PlayerProgress.Volume;
+        }
+    }
+
+    public static void PlayMenuMusic()
+    {
+        PlayMusic("main-menu.mp3");
+    }
+
+    public static void PlayLevelMusic()
+    {
+        PlayMusic("Ambient.wav");
+    }
+
+    private static void PlayMusic(string fileName)
+    {
+        var musicPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI", "Music", fileName);
+        if (!File.Exists(musicPath))
+            return;
+
+        if (mediaPlayer == null)
+            mediaPlayer = new MediaPlayer();
+        else
+        {
+            mediaPlayer.Stop();
+            mediaPlayer.Close();
+        }
+
+        mediaPlayer.Open(new Uri(musicPath));
+        mediaPlayer.Volume = Program.PlayerProgress.Volume;
+        mediaPlayer.MediaEnded -= OnMediaEnded;
+        mediaPlayer.MediaEnded += OnMediaEnded;
+        mediaPlayer.Play();
+    }
+
+    private static void OnMediaEnded(object sender, EventArgs e)
+    {
+        if (mediaPlayer != null)
+        {
+            mediaPlayer.Position = TimeSpan.Zero;
+            mediaPlayer.Play();
+        }
+    }
+
 }

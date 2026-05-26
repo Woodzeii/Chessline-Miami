@@ -36,13 +36,10 @@ static class Program
         // Загружаем прогресс игрока
         PlayerProgress = PlayerProgress.LoadProgress();
         PlayerProgress.InitializeLevels(new List<string> { "StartLevel", "Level2", "Level3", "Level4", "Level5" });
+        SFX.PlayerProgress = PlayerProgress;
         
-        var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Music/Ambient.wav"); 
-
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.Open(new Uri(musicPath));
-        mediaPlayer.Volume = PlayerProgress.Volume;
-        mediaPlayer.Play();
+        // Стартовая музыка главного меню
+        SFX.PlayMenuMusic();
         
         // Создаем форму
         Form = new GameForm();
@@ -88,6 +85,7 @@ static class Program
     
         Form.SetPresenter(presenter);
         Form.SetGame(game);
+        SFX.PlayLevelMusic();
     }
 
     public static void LoadNextLevel()
