@@ -350,15 +350,16 @@ public partial class GameForm : Form, IGameView
         if (_game?.Level != null)
             LevelViewer.DrawLevel(g, _game.Level, CameraOffset);
         
+        
+        
+        if (_game?.Enemies != null)
+            EnemiesViewer.DrawEnemies(g, _game.Enemies, CameraOffset);
+            
         if (_game?.Player != null)
         {
             PlayerViewer.DrawPlayer(g, _game.Player, CameraOffset);
             PlayerViewer.DrawRushBar(g, _game.Player, _isRPressed);
         }
-        
-        if (_game?.Enemies != null)
-            EnemiesViewer.DrawEnemies(g, _game.Enemies, CameraOffset);
-        
         // Draw attack preview
         if (_game?.Player != null && _game.Player.IsAttacking && IsMouseOverForm && !MenuViewer.IsPaused && !MenuViewer.IsShowingTutorial)
             PlayerViewer.DrawAttackPreview(g, _game.Player, CameraOffset);

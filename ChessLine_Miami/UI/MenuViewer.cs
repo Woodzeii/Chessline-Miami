@@ -51,13 +51,14 @@ public class MenuViewer
         var menuWidth = 400;
         var menuHeight = 400;
         var menuX = (form.ClientSize.Width - menuWidth) / 2;
-        var menuY = (form.ClientSize.Height - menuHeight) / 2;
+        var menuY = (form.ClientSize.Height - menuHeight) / 2+200;
 
         
-
+        
         // Заголовок
         using var titleFont = new Font("Arial", 24, FontStyle.Bold);
-        g.DrawString("CHESSLINE MIAMI", titleFont, Brushes.White, menuX + 50, menuY + 20);
+        //g.DrawString("CHESSLINE MIAMI", titleFont, Brushes.White, menuX + 50, menuY + 20);
+        g.DrawImage(Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/LogoCM.png")), menuX-240 , menuY-470, 900, 900*2/3);
 
         var buttonWidth = 250;
         var buttonHeight = 50;
@@ -65,19 +66,19 @@ public class MenuViewer
 
         // Кнопка "Начать игру"
         _mainMenuStartButtonRect = new Rectangle(buttonX, menuY + 80, buttonWidth, buttonHeight);
-        DrawMainMenuButton(g, _mainMenuStartButtonRect, "Начать игру");
+        DrawMainMenuButton(g, _mainMenuStartButtonRect, "Start Game");
 
         // Кнопка "Комнаты"
         _mainMenuRoomsButtonRect = new Rectangle(buttonX, menuY + 150, buttonWidth, buttonHeight);
-        DrawMainMenuButton(g, _mainMenuRoomsButtonRect, "Комнаты");
+        DrawMainMenuButton(g, _mainMenuRoomsButtonRect, "Rooms");
 
         // Кнопка "Настройки"
         _mainMenuSettingsButtonRect = new Rectangle(buttonX, menuY + 220, buttonWidth, buttonHeight);
-        DrawMainMenuButton(g, _mainMenuSettingsButtonRect, "Настройки");
+        DrawMainMenuButton(g, _mainMenuSettingsButtonRect, "Settings");
 
         // Кнопка "Выйти"
         _mainMenuExitButtonRect = new Rectangle(buttonX, menuY + 290, buttonWidth, buttonHeight);
-        DrawMainMenuButton(g, _mainMenuExitButtonRect, "Выйти из игры");
+        DrawMainMenuButton(g, _mainMenuExitButtonRect, "Exit Game");
     }
 
     private void DrawMainMenuButton(Graphics g, Rectangle rect, string text)
@@ -280,7 +281,7 @@ public class MenuViewer
 
             // Текст уровня
             using var levelFont = new Font("Arial", 14, FontStyle.Bold);
-            string levelText = $"Уровень {i + 1}";
+            string levelText = $"Level {i + 1}";
             var textSize = g.MeasureString(levelText, levelFont);
             g.DrawString(levelText, levelFont, Brushes.White,
                 rect.X + (rect.Width - textSize.Width) / 2,
@@ -299,7 +300,7 @@ public class MenuViewer
             else if (!canPlay)
             {
                 using var lockFont = new Font("Arial", 12, FontStyle.Bold);
-                g.DrawString("ЗАКРЫТО", lockFont, Brushes.Red,
+                g.DrawString("LOCKED", lockFont, Brushes.Red,
                     rect.X + (rect.Width - 50) / 2,
                     rect.Y + 25);
             }
@@ -307,7 +308,7 @@ public class MenuViewer
 
         // Кнопка "Назад"
         _levelSelectionBackButtonRect = new Rectangle(screenWidth - 150, screenHeight - 50, 100, 40);
-        DrawButton(g, _levelSelectionBackButtonRect, "Назад");
+        DrawButton(g, _levelSelectionBackButtonRect, "Back");
     }
 
     // Экран настроек
@@ -330,11 +331,11 @@ public class MenuViewer
 
         // Заголовок
         using var titleFont = new Font("Arial", 24, FontStyle.Bold);
-        g.DrawString("НАСТРОЙКИ", titleFont, Brushes.White, menuX + 150, menuY + 20);
+        g.DrawString("SETTINGS", titleFont, Brushes.White, menuX + 150, menuY + 20);
 
         // Громкость
         using var labelFont = new Font("Arial", 14, FontStyle.Bold);
-        g.DrawString("Громкость:", labelFont, Brushes.White, menuX + 40, menuY + 100);
+        g.DrawString("Volume:", labelFont, Brushes.White, menuX + 40, menuY + 100);
 
         // Кнопка уменьшения громкости
         _volumeDecreaseButtonRect = new Rectangle(menuX + 40, menuY + 140, 50, 40);
@@ -366,7 +367,7 @@ public class MenuViewer
 
         // Кнопка "Назад"
         _settingsBackButtonRect = new Rectangle(menuX + (menuWidth - 150) / 2, menuY + 270, 150, 50);
-        DrawButton(g, _settingsBackButtonRect, "Назад");
+        DrawButton(g, _settingsBackButtonRect, "Back");
     }
 
     private void DrawButton(Graphics g, Rectangle rect, string text)

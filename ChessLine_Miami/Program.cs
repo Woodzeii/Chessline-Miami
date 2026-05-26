@@ -19,6 +19,11 @@ static class Program
         LevelGenerator.LoadFromStringArray(Levels.AllLevels[2].Split('\n').Where(s => s.Length > 0).ToArray(), "Level3"),
         LevelGenerator.LoadFromStringArray(Levels.AllLevels[3].Split('\n').Where(s => s.Length > 0).ToArray(), "Level4"),
         LevelGenerator.LoadFromStringArray(Levels.AllLevels[4].Split('\n').Where(s => s.Length > 0).ToArray(), "Level5"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[0].Split('\n').Where(s => s.Length > 0).ToArray(), "level6"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[1].Split('\n').Where(s => s.Length > 0).ToArray(), "Level7"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[2].Split('\n').Where(s => s.Length > 0).ToArray(), "Level8"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[3].Split('\n').Where(s => s.Length > 0).ToArray(), "Level9"),
+        LevelGenerator.LoadFromStringArray(Levels.AllLevels[4].Split('\n').Where(s => s.Length > 0).ToArray(), "Level10"),
     };
 
     static GameForm Form;
@@ -35,7 +40,7 @@ static class Program
         
         // Загружаем прогресс игрока
         PlayerProgress = PlayerProgress.LoadProgress();
-        PlayerProgress.InitializeLevels(new List<string> { "StartLevel", "Level2", "Level3", "Level4", "Level5" });
+        PlayerProgress.InitializeLevels(new List<string> { "StartLevel", "Level2", "Level3", "Level4", "Level5","level6","level7","level8","level9","level10" });
         SFX.PlayerProgress = PlayerProgress;
         
         // Стартовая музыка главного меню
