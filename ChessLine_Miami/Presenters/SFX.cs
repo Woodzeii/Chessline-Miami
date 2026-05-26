@@ -82,15 +82,45 @@ public class SFX
             mediaPlayer.Volume = Program.PlayerProgress.Volume;
         }
     }
+    
+
+    public static void PlayNormal()
+    {
+        PlayMusic("normal.mp3");
+    }
+    public static void PlayHackers()
+    {
+        PlayMusic("Hackers.mp3");
+    }
+    public static void Play1st()
+    {
+        PlayMusic("1st.mp3");
+    }
+    public static void PlayLevelFinished()
+    {
+        PlayMusic("LevelFinished.mp3");
+    }
+    public static void PlayCyberpunk()
+    {
+        PlayMusic("Cyberpunk.mp3");
+    }
+    public static void PlayEpic()
+    {
+        PlayMusic("Epic.mp3");
+    }
+    public static void PlayNightCrawler()
+    {
+        PlayMusic("NightCrawler.mp3");
+    }
 
     public static void PlayMenuMusic()
     {
         PlayMusic("main-menu.mp3");
     }
 
-    public static void PlayLevelMusic()
+    public static void PlayActive()
     {
-        PlayMusic("Ambient.wav");
+        PlayMusic("Active.wav");
     }
 
     private static void PlayMusic(string fileName)

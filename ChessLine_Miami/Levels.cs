@@ -112,7 +112,7 @@ public static class Levels
     "W.......................W\n" +
     "W...R...............R...W\n" +
     "W.......................W\n" +
-    "WLLLLLLLL..L.L..LLLLLLLLW\n" +
+    "WWWWWWLLL..L.L..LLLWWWWWW\n" +
     "W.......L.L.L.L.L.......W\n" +
     "W.......L...I...L.......W\n" +
     "W.......L.......L.......W\n" +

@@ -90,7 +90,40 @@ static class Program
     
         Form.SetPresenter(presenter);
         Form.SetGame(game);
-        SFX.PlayLevelMusic();
+        switch (currentLevelIndex)
+        {
+            case 0:
+                SFX.PlayNightCrawler();
+                break;
+            case 1:
+                SFX.PlayNormal();
+                break;
+            case 2:
+                SFX.PlayNightCrawler();
+                break;
+            case 3:
+                SFX.PlayEpic();
+                break;
+            case 4:
+                SFX.PlayNormal();
+                break;
+            case 5:
+                SFX.PlayNightCrawler();
+                break;
+            case 6:
+                SFX.PlayHackers();
+                break;
+            case 7:
+                SFX.PlayNightCrawler();
+                break;
+            case 8:
+                SFX.Play1st();
+                break;
+            case 9:
+                SFX.PlayActive();
+                break;
+        }
+        
     }
 
     public static void LoadNextLevel()
