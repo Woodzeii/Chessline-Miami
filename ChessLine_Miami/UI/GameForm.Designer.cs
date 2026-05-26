@@ -28,6 +28,7 @@ partial class GameForm
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
         this.Text = "ChessLine Miami";
+        this.BackColor = System.Drawing.Color.DarkSlateGray;
     }
     
 }

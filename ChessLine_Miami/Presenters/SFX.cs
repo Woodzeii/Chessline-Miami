@@ -83,7 +83,10 @@ public class SFX
         }
     }
     
-
+    public static void PlayHydrogen()
+    {
+        PlayMusic("MoonHydrogenRemix.mp3");
+    }
     public static void PlayNormal()
     {
         PlayMusic("normal.mp3");
