@@ -18,8 +18,7 @@ public class PlayerPresenter
     {
         if (e.KeyCode == key)
         {
-            player.TryMove(deltaX, deltaY, _game, steps);
-            return true;
+            return player.TryMove(deltaX, deltaY, _game, steps);
         }
         return false;
     }

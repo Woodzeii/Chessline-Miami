@@ -86,7 +86,7 @@ public class Player
           }
 
           FieldPos = currentPos;
-          return false;
+          return true;
      }
 
      public void SetAttackTarget(Point target)
