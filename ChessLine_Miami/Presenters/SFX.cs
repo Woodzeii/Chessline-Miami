@@ -123,7 +123,7 @@ public class SFX
 
     public static void PlayActive()
     {
-        PlayMusic("Active.wav");
+        PlayMusic("Active.mp3");
     }
 
     private static void PlayMusic(string fileName)
