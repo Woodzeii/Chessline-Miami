@@ -153,7 +153,11 @@ public class MenuViewer
             g.DrawRectangle(menuPen, menuX, menuY, menuWidth, menuHeight);
 
             using var titleFont = new Font("Arial", 16, FontStyle.Bold);
-            g.DrawString("PAUSED", titleFont, Brushes.White, menuX + 100, menuY + 20);
+            var titleText = "PAUSED";
+            var titleSize = g.MeasureString(titleText, titleFont);
+            g.DrawString(titleText, titleFont, Brushes.White,
+                menuX + (menuWidth - titleSize.Width) / 2,
+                menuY + 20);
 
             var buttonWidth = 200;
             var buttonHeight = 40;
@@ -190,7 +194,11 @@ public class MenuViewer
         g.DrawRectangle(menuPen, menuX, menuY, menuWidth, menuHeight);
 
         using var titleFont = new Font("Arial", 28, FontStyle.Bold);
-        g.DrawString("LEVEL COMPLETE!", titleFont, Brushes.Gold, menuX + 80, menuY + 20);
+        var titleText = "LEVEL COMPLETE!";
+        var titleSize = g.MeasureString(titleText, titleFont);
+        g.DrawString(titleText, titleFont, Brushes.Gold,
+            menuX + (menuWidth - titleSize.Width) / 2,
+            menuY + 20);
 
         var startY = menuY + 100;
         using var statsFont = new Font("Arial", 14, FontStyle.Bold);
@@ -243,7 +251,11 @@ public class MenuViewer
 
         // Заголовок
         using var titleFont = new Font("Arial", 28, FontStyle.Bold);
-        g.DrawString("SELECT LEVEL", titleFont, Brushes.Gold, 50, 30);
+        var titleText = "SELECT LEVEL";
+        var titleSize = g.MeasureString(titleText, titleFont);
+        g.DrawString(titleText, titleFont, Brushes.Gold,
+            (screenWidth - titleSize.Width) / 2,
+            30);
 
         // Очищаем старые ректы
         _levelButtonRects.Clear();
@@ -251,7 +263,8 @@ public class MenuViewer
         var buttonWidth = 250;
         var buttonHeight = 70;
         var spacing = 20;
-        var startX = 50;
+        var gridWidth = buttonWidth * 2 + spacing;
+        var startX = (screenWidth - gridWidth) / 2;
         var startY = 100;
 
         // Рисуем кнопки уровней
@@ -308,7 +321,7 @@ public class MenuViewer
         }
 
         // Кнопка "Назад"
-        _levelSelectionBackButtonRect = new Rectangle(screenWidth - 150, screenHeight - 50, 100, 40);
+        _levelSelectionBackButtonRect = new Rectangle((screenWidth - 100) / 2, screenHeight - 60, 100, 40);
         DrawButton(g, _levelSelectionBackButtonRect, "Back");
     }
 
@@ -332,7 +345,11 @@ public class MenuViewer
 
         // Заголовок
         using var titleFont = new Font("Arial", 24, FontStyle.Bold);
-        g.DrawString("SETTINGS", titleFont, Brushes.White, menuX + 150, menuY + 20);
+        var titleText = "SETTINGS";
+        var titleSize = g.MeasureString(titleText, titleFont);
+        g.DrawString(titleText, titleFont, Brushes.White,
+            menuX + (menuWidth - titleSize.Width) / 2,
+            menuY + 20);
 
         // Громкость
         using var labelFont = new Font("Arial", 14, FontStyle.Bold);
@@ -375,7 +392,7 @@ public class MenuViewer
             using var fill = new SolidBrush(Color.Orange);
             g.FillRectangle(fill, Rectangle.Inflate(_lavaCheckboxRect, -3, -3));
         }
-        g.DrawString("Simple lava tiles", labelFont, Brushes.White, menuX + 70, menuY + 198);
+        g.DrawString("Simple lava tiles(Optimization for FPS)", labelFont, Brushes.White, menuX + 70, menuY + 198);
 
         // Кнопка "Назад"
         _settingsBackButtonRect = new Rectangle(menuX + (menuWidth - 150) / 2, menuY + 270, 150, 50);

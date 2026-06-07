@@ -149,6 +149,7 @@ public class GamePresenter
             {
                 if (enemy.IsAlive)
                 {
+                    
                     enemy.Kill();
                     _game.RegisterKill(); // Регистрируем килл для комбо
                     var musicPath =  Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/hotline-miami-hit.wav"); 
