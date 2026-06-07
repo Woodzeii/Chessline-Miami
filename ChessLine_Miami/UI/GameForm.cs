@@ -298,8 +298,8 @@ public partial class GameForm : Form, IGameView
             return;
         }
 
-        // Tutorial button for first level
-        if (MenuViewer._tutorialButtonRect.Contains(e.Location) && _game?.Level?.Name == "StartLevel")
+        // Кнопочъка туториала
+        if (MenuViewer._tutorialButtonRect.Contains(e.Location) && _game?.Level?.Name == "Basis")
         {
             MenuViewer.IsShowingTutorial = true;
             MenuViewer.TutorialImageIndex = 0;
@@ -381,9 +381,11 @@ public partial class GameForm : Form, IGameView
             LevelViewer.DrawLevel(g, _game.Level, CameraOffset);
         
         
-        
+        var aliveEn = _game.Enemies.Where(x=>x.IsAlive).ToList();
+        var deadEn = _game.Enemies.Where(x=>!x.IsAlive).ToList();
         if (_game?.Enemies != null)
-            EnemiesViewer.DrawEnemies(g, _game.Enemies, CameraOffset);
+            EnemiesViewer.DrawEnemies(g, deadEn, CameraOffset);
+        EnemiesViewer.DrawEnemies(g, aliveEn, CameraOffset);
             
         if (_game?.Player != null)
         {

@@ -50,14 +50,14 @@ public class GamePresenter
     public async Task OnKeyDown(KeyEventArgs e, bool isRush)
     {
         if (await EndIfDead()) return;
-        if (_game.IsLevelFinished())
-        {
-            // Завершаем статистику
-            _game.FinalizeStats();
-            // Показываем экран результатов через MenuViewer
-            _view.OnLevelComplete();
-            return;
-        }
+        // if (_game.IsLevelFinished())
+        // {
+        //     // Завершаем статистику
+        //     _game.FinalizeStats();
+        //     // Показываем экран результатов через MenuViewer
+        //     _view.OnLevelComplete();
+        //     return;
+        // }
         var moved = _playerPresenter.WASD(e, isRush);
         
         if (moved)
@@ -68,9 +68,9 @@ public class GamePresenter
             _enemiesPresenter.UpdateEnemies();
             System.Diagnostics.Debug.WriteLine($"=== Enemies after update: {_game.Enemies.Count} ===");
             _view.Redraw();
-            if (await EndIfDead()) return;
-            
+            await EndIfDead();
         }
+        await EndIfDead();
     }
 
     private async Task<bool> EndIfDead()
@@ -137,10 +137,10 @@ public class GamePresenter
 
     public async Task ExecuteAttack(int targetX, int targetY)
     {
+        await EndIfDead();
         var player = _game.Player;
         var dx = Math.Abs(targetX - player.FieldPos.X);
         var dy = Math.Abs(targetY - player.FieldPos.Y);
-
         // Only allow diagonal attacks
         if (dx == dy && dx == 1)
         {
@@ -177,6 +177,14 @@ public class GamePresenter
                 sfx.PlayMp3(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/SFX/slow-swing.mp3"));
                 
             }
+        }
+        if (_game.IsLevelFinished())
+        {
+            // Завершаем статистику
+            _game.FinalizeStats();
+            // Показываем экран результатов через MenuViewer
+            _view.OnLevelComplete();
+            return;
         }
     }
 
