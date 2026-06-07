@@ -55,16 +55,16 @@ static class Program
         }
     }
 
-    public static void LoadLevel(int levelIndex)
+    public static bool LoadLevel(int levelIndex)
     {
         if (levelIndex < 0 || levelIndex >= levels.Count)
-            return;
+            return false;
 
         // Проверяем, может ли игрок играть этот уровень
         if (!PlayerProgress.CanPlayLevel(levelIndex))
         {
             MessageBox.Show("Вы не можете играть этот уровень. Пройдите предыдущие уровни первыми.", "Недоступен", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return;
+            return false;
         }
 
         currentLevelIndex = levelIndex;
@@ -119,6 +119,7 @@ static class Program
                 break;
         }
         
+        return true;
     }
 
     public static void LoadNextLevel()

@@ -208,10 +208,12 @@ public partial class GameForm : Form, IGameView
             // Проверяем клик на кнопки уровней
             for (int i = 0; i < MenuViewer._levelButtonRects.Count; i++)
             {
-                if (MenuViewer._levelButtonRects[i].Contains(e .Location))
+                if (MenuViewer._levelButtonRects[i].Contains(e.Location))
                 {
-                    MenuViewer.IsShowingLevelSelection = false;
-                    Program.LoadLevel(i);
+                    if (Program.LoadLevel(i))
+                    {
+                        MenuViewer.IsShowingLevelSelection = false;
+                    }
                     this.Invalidate();
                     return;
                 }
