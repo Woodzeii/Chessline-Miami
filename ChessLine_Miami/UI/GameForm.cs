@@ -153,6 +153,15 @@ public partial class GameForm : Form, IGameView
                 return;
             }
 
+            // Чекбокс простой отрисовки лавы
+            if (MenuViewer._lavaCheckboxRect.Contains(e.Location))
+            {
+                Program.PlayerProgress.UseSimpleLavaTiles = !Program.PlayerProgress.UseSimpleLavaTiles;
+                Program.PlayerProgress.SaveProgress();
+                this.Invalidate();
+                return;
+            }
+
             // Клик на слайдер громкости
             if (MenuViewer._volumeSliderRect.Contains(e.Location))
             {

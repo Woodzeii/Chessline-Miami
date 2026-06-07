@@ -40,7 +40,8 @@ static class Program
         
         // Загружаем прогресс игрока
         PlayerProgress = PlayerProgress.LoadProgress();
-        PlayerProgress.InitializeLevels(new List<string> { "StartLevel", "Level2", "Level3", "Level4", "Level5","level6","level7","level8","level9","level10" });
+        // Инициализируем прогресс с пустыми именами уровней — пользователь задаст их отдельно
+        PlayerProgress.InitializeLevels(new List<string> { "Basis", "Streets", "Warehouse", "Jailed", "Beasts", "Mongolians", "Castle of Lava", "Zergs!", "Stairway to hell", "Kings Palace" });
         SFX.PlayerProgress = PlayerProgress;
         
         // Стартовая музыка главного меню

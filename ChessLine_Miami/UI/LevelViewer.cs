@@ -1,14 +1,24 @@
 using System.IO;
 using ChessLine_Miami.Models;
 using ChessLine_Miami.Presenters;
+using ChessLine_Miami;
 namespace ChessLine_Miami.UI;
 public class LevelViewer
 {
     private int CellSize = _constants.CellSize;
+    private static Image? lavaImg = null;
     
     public void DrawLevel(Graphics g, Level level, Point cameraOffset)
     {
-        Image lavaImg = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/Lava.jpg"));
+        // Загружаем изображение лавы лениво только если пользователь не включил простой режим
+        if (!Program.PlayerProgress.UseSimpleLavaTiles && lavaImg == null)
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/Lava.jpg");
+            if (File.Exists(path))
+            {
+                try { lavaImg = Image.FromFile(path); } catch { lavaImg = null; }
+            }
+        }
         using var wallBrush = new SolidBrush(Color.FromArgb(5, 5, 10));
         using var wallHighlightPen = new Pen(Color.White, 4);
         using var glowPen = new Pen(Color.FromArgb(100, 150, 255), 6);
@@ -56,7 +66,15 @@ public class LevelViewer
                         }
                         break;
                     case SectorType.Lava:
-                        g.DrawImage(lavaImg, cellRect);
+                        if (Program.PlayerProgress.UseSimpleLavaTiles)
+                        {
+                            using var lavaBrush = new SolidBrush(Color.Orange);
+                            g.FillRectangle(lavaBrush, cellRect);
+                        }
+                        else if (lavaImg != null)
+                        {
+                            g.DrawImage(lavaImg, cellRect);
+                        }
                         break;
                     default:
                         var floorBrush = ((x + y) % 2 == 0)

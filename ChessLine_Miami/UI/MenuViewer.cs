@@ -20,6 +20,7 @@ public class MenuViewer
     public Rectangle _volumeSliderRect;
     public Rectangle _volumeDecreaseButtonRect;
     public Rectangle _volumeIncreaseButtonRect;
+    public Rectangle _lavaCheckboxRect;
 
     // Level Selection
     public List<Rectangle> _levelButtonRects = new();
@@ -279,9 +280,9 @@ public class MenuViewer
             g.FillRectangle(buttonBrush, rect);
             g.DrawRectangle(buttonPen, rect);
 
-            // Текст уровня
+            // Текст уровня (имя из PlayerProgress, может быть пустым)
             using var levelFont = new Font("Arial", 14, FontStyle.Bold);
-            string levelText = $"Level {i + 1}";
+            string levelText = levelData.LevelName;
             var textSize = g.MeasureString(levelText, levelFont);
             g.DrawString(levelText, levelFont, Brushes.White,
                 rect.X + (rect.Width - textSize.Width) / 2,
@@ -364,6 +365,17 @@ public class MenuViewer
         using var valueFont = new Font("Arial", 12, FontStyle.Regular);
         var volumePercent = (int)(playerProgress.Volume * 100);
         g.DrawString($"{volumePercent}%", valueFont, Brushes.Yellow, menuX + 420, menuY + 148);
+
+        // Простая отрисовка лавы (оптимизация) - чекбокс
+        _lavaCheckboxRect = new Rectangle(menuX + 40, menuY + 200, 20, 20);
+        using var checkboxPen = new Pen(Color.White, 2);
+        g.DrawRectangle(checkboxPen, _lavaCheckboxRect);
+        if (playerProgress.UseSimpleLavaTiles)
+        {
+            using var fill = new SolidBrush(Color.Orange);
+            g.FillRectangle(fill, Rectangle.Inflate(_lavaCheckboxRect, -3, -3));
+        }
+        g.DrawString("Simple lava tiles", labelFont, Brushes.White, menuX + 70, menuY + 198);
 
         // Кнопка "Назад"
         _settingsBackButtonRect = new Rectangle(menuX + (menuWidth - 150) / 2, menuY + 270, 150, 50);

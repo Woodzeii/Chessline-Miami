@@ -62,6 +62,9 @@ public class PlayerProgress
 
     [JsonPropertyName("volume")]
     public double Volume { get; set; } = 0.3;
+    
+    [JsonPropertyName("useSimpleLavaTiles")]
+    public bool UseSimpleLavaTiles { get; set; } = false;
 
     public static string GetProgressFilePath()
     {
