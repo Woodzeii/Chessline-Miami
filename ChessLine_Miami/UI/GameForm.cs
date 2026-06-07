@@ -378,7 +378,10 @@ public partial class GameForm : Form, IGameView
         }
         
         if (_game?.Level != null)
-            LevelViewer.DrawLevel(g, _game.Level, CameraOffset);
+        {
+            LevelViewer.DrawLevel(g, _game, CameraOffset);
+            DrawBackgroundNeon(g);
+        }
         
         
         var aliveEn = _game.Enemies.Where(x=>x.IsAlive).ToList();
@@ -433,6 +436,44 @@ public partial class GameForm : Form, IGameView
         var padding = 20;
         g.FillRectangle(backgroundBrush, x - padding, y - padding, textSize.Width + padding * 2, textSize.Height + padding * 2);
         g.DrawString(title, titleFont, Brushes.White, x, y);
+    }
+
+    private void DrawBackgroundNeon(Graphics g)
+    {
+        if (_game == null || _game.Level == null)
+            return;
+
+        const double blinkOnDuration = 0.025;
+        const double blinkOffDuration = 0.050;
+        const int blinkCount = 3;
+        var cycleDuration = blinkOnDuration + blinkOffDuration;
+        var totalDuration = blinkCount * cycleDuration;
+
+        var elapsed = (DateTime.Now - _game.LastKillTime).TotalSeconds;
+        if (elapsed >= totalDuration)
+            return;
+
+        var cycleIndex = (int)(elapsed / cycleDuration);
+        var cycleOffset = elapsed % cycleDuration;
+        if (cycleIndex >= blinkCount || cycleOffset >= blinkOnDuration)
+            return;
+
+        var neonColor = Color.FromArgb(120, 180, 40, 255);
+
+        var levelRect = new Rectangle(
+            CameraOffset.X,
+            CameraOffset.Y,
+            _game.Level.Size.Width * _constants.CellSize,
+            _game.Level.Size.Height * _constants.CellSize);
+
+        using var overlayBrush = new SolidBrush(neonColor);
+        using var backgroundRegion = new Region(ClientRectangle);
+        backgroundRegion.Exclude(levelRect);
+
+        var savedClip = g.Clip;
+        g.SetClip(backgroundRegion, System.Drawing.Drawing2D.CombineMode.Replace);
+        g.FillRectangle(overlayBrush, ClientRectangle);
+        g.Clip = savedClip;
     }
 
     public void OnLevelComplete()

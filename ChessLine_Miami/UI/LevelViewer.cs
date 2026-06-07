@@ -7,9 +7,30 @@ public class LevelViewer
 {
     private int CellSize = _constants.CellSize;
     private static Image? lavaImg = null;
+    private const double NeonFlashDurationSeconds = 0.250;
     
-    public void DrawLevel(Graphics g, Level level, Point cameraOffset)
+    public void DrawLevel(Graphics g, Game game, Point cameraOffset)
     {
+        var level = game.Level;
+        var neonActive = game.Stats.TotalKills > 0 && (DateTime.Now - game.LastKillTime).TotalSeconds < NeonFlashDurationSeconds;
+        var neonStrength = neonActive
+            ? 1f - (float)((DateTime.Now - game.LastKillTime).TotalSeconds / NeonFlashDurationSeconds)
+            : 0f;
+        var neonColor = Color.FromArgb(
+            (int)(150 * neonStrength),
+            180,
+            40,
+            255);
+        var wallBrushColor = neonActive
+            ? Color.FromArgb(80, 40, 10, 80)
+            : Color.FromArgb(5, 5, 10);
+        var wallHighlightColor = neonActive
+            ? Color.FromArgb(220, 140, 40, 255)
+            : Color.White;
+        var glowColor = neonActive
+            ? Color.FromArgb((int)(180 * neonStrength), 180, 0, 255)
+            : Color.FromArgb(100, 150, 255);
+
         // Загружаем изображение лавы лениво только если пользователь не включил простой режим
         if (!Program.PlayerProgress.UseSimpleLavaTiles && lavaImg == null)
         {
@@ -19,9 +40,9 @@ public class LevelViewer
                 try { lavaImg = Image.FromFile(path); } catch { lavaImg = null; }
             }
         }
-        using var wallBrush = new SolidBrush(Color.FromArgb(5, 5, 10));
-        using var wallHighlightPen = new Pen(Color.White, 4);
-        using var glowPen = new Pen(Color.FromArgb(100, 150, 255), 6);
+        using var wallBrush = new SolidBrush(wallBrushColor);
+        using var wallHighlightPen = new Pen(wallHighlightColor, 4);
+        using var glowPen = new Pen(glowColor, 6);
 
         bool IsWall(int px, int py)
             => px >= 0 && py >= 0 && px < level.Size.Width && py < level.Size.Height && level.GetSector(px, py) == SectorType.Wall;
@@ -77,11 +98,14 @@ public class LevelViewer
                         }
                         break;
                     default:
-                        var floorBrush = ((x + y) % 2 == 0)
-                            ? new SolidBrush(Color.FromArgb(24, 16, 42))
-                            : new SolidBrush(Color.FromArgb(14, 8, 24));
+                    {
+                        var floorColor = ((x + y) % 2 == 0)
+                            ? Color.FromArgb(24, 16, 42)
+                            : Color.FromArgb(14, 8, 24);
+                        using var floorBrush = new SolidBrush(floorColor);
                         g.FillRectangle(floorBrush, cellRect);
                         break;
+                    }
                 }
             }
         }

@@ -158,7 +158,6 @@ public class GamePresenter
                     mediaPlayer.Open(new Uri(musicPath));
                     mediaPlayer.Play();
                     player.TryMoveOnPoint(player.AttackTarget, _game);
-                    EndIfDead(); // Проверяем, не умер ли игрок от контратаки
                     System.Diagnostics.Debug.WriteLine($"Attack at ({targetX}, {targetY})");
                     player.ClearAttack();
                     await Task.Delay(300);
@@ -168,6 +167,8 @@ public class GamePresenter
                     _view.Redraw();
                     IsHitten = true;
                 }
+
+                EndIfDead();
             }
             if (!IsHitten)
             {
