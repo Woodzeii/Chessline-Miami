@@ -30,7 +30,7 @@ public class MenuViewer
     public bool IsPaused { get;  set; }
     public bool IsShowingTutorial { get;  set; }
     public bool IsShowingLevelComplete { get; set; }
-    public int TutorialImageIndex { get;  set; } // 0 = WalkGuide, 1 = AttackGuide
+    public int TutorialImageIndex { get;  set; } // 0 = WalkGuide, 1 = AttackGuide, 2 = Strategy
     public Rectangle _tutorialButtonRect;
     public Rectangle _pauseResumeButtonRect;
     public Rectangle _pauseRestartButtonRect;
@@ -114,25 +114,42 @@ public class MenuViewer
             using var dimBrush = new SolidBrush(Color.FromArgb(200, 0, 0, 0));
             g.FillRectangle(dimBrush, form.ClientRectangle);
 
-            string imagePath = TutorialImageIndex == 0
-                ? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/guide/WalkGuide.png")
-                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/guide/AttackGuide.png");
+            string imagePath;
+            switch (TutorialImageIndex)
+            {
+                case 1:
+                    imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/guide/AttackGuide.png");
+                    break;
+                case 2:
+                    imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/guide/Strategy.png");
+                    break;
+                default:
+                    imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UI/Photo/guide/WalkGuide.png");
+                    break;
+            }
 
             if (File.Exists(imagePath))
             {
                 using var tutorialImage = Image.FromFile(imagePath);
-                var imageWidth = 1536/2;
-                var imageHeight = 1024/2;
+                var imageWidth = 1536 / 2;
+                var imageHeight = 1024 / 2;
                 var x = (form.ClientSize.Width - imageWidth) / 2;
                 var y = (form.ClientSize.Height - imageHeight) / 2;
                 g.DrawImage(tutorialImage, x, y, imageWidth, imageHeight);
             }
 
             using var font = new Font("Arial", 14, FontStyle.Bold);
-            var instructionText = TutorialImageIndex == 0 ? "Click to see Attack Guide" : "Click to continue";
+            string instructionText = TutorialImageIndex switch
+            {
+                0 => "Click to see Attack Guide",
+                1 => "Click to see Strategy",
+                2 => "Click to close",
+                _ => "Click to continue"
+            };
+
             var textSize = g.MeasureString(instructionText, font);
-            g.DrawString(instructionText, font, Brushes.White, 
-                (form.ClientSize.Width - textSize.Width) / 2, 
+            g.DrawString(instructionText, font, Brushes.White,
+                (form.ClientSize.Width - textSize.Width) / 2,
                 form.ClientSize.Height - 60);
         }
 

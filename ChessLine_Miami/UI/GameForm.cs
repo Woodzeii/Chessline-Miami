@@ -274,9 +274,15 @@ public partial class GameForm : Form, IGameView
 
         if (MenuViewer.IsShowingTutorial)
         {
-            MenuViewer.TutorialImageIndex = (MenuViewer.TutorialImageIndex + 1) % 2;
-            if (MenuViewer.TutorialImageIndex == 0)
+            // Advance tutorial pages: 0 -> 1 -> 2, click on 2 closes the tutorial
+            if (MenuViewer.TutorialImageIndex < 2)
+            {
+                MenuViewer.TutorialImageIndex++;
+            }
+            else
+            {
                 MenuViewer.IsShowingTutorial = false;
+            }
             return;
         }
 
