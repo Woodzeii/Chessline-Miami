@@ -141,9 +141,9 @@ public class MenuViewer
             using var font = new Font("Arial", 14, FontStyle.Bold);
             string instructionText = TutorialImageIndex switch
             {
-                0 => "Click to see Attack Guide",
-                1 => "Click to see Strategy",
-                2 => "Click to close",
+                0 => "Click to see Attack Guide(If fps low-check settings)",
+                1 => "Click to see Strategy(If fps low-check settings)",
+                2 => "Click to close(If fps low-check settings)",
                 _ => "Click to continue"
             };
 
