@@ -49,6 +49,13 @@ public partial class GameForm : Form, IGameView
         
         
         InitializeComponent();
+        // Запуск в полноэкранном режиме без рамки
+        this.FormBorderStyle = FormBorderStyle.None;
+        this.WindowState = FormWindowState.Maximized;
+        this.TopMost = true;
+        var primary = Screen.PrimaryScreen;
+        if (primary != null)
+            this.Bounds = primary.Bounds;
         this.DoubleBuffered = true;
         this.Paint += new PaintEventHandler(OnPaint);
         this.KeyDown += GameForm_KeyDown;
