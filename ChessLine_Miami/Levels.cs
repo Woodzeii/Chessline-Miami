@@ -3,6 +3,7 @@ public static class Levels
 {
 
     public static string level1 =
+    "Basis\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W......................................W\n" +
     "W......................................W\n" +
@@ -18,6 +19,7 @@ public static class Levels
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
     public static string level2 = 
+    "Streets\n" +
     "WWWW.I.WWWWWWWWWWWWWWWWWW\n" +
     "W..........W............W\n" +
     "W..........W......P.....W\n" +
@@ -40,6 +42,7 @@ public static class Levels
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
     public static string level3 = 
+    "Warehouse\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W.................W.....W\n" +
     "W..K..............W..I..W\n" +
@@ -64,6 +67,7 @@ public static class Levels
 
     
     public static string level4 = 
+    "Jailed\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W.......................W\n" +
     "W....P.............P....W\n" +
@@ -86,6 +90,7 @@ public static class Levels
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
     public static string level5 = 
+    "Beasts\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W......P................W\n" +
     "W....K..................W\n" +
@@ -108,6 +113,7 @@ public static class Levels
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
     public static string level6 = 
+    "Castle of Lava\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W.......................W\n" +
     "W...R...............R...W\n" +
@@ -131,6 +137,7 @@ public static class Levels
 
     //МСНГОЛЫ
     public static string level7 = 
+    "Mongolians\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W.......................W\n" +
     "W.....K.....K.....K.....W\n" +
@@ -144,21 +151,22 @@ public static class Levels
 
     //ZERG RUSH!!!
     public static string level8 = 
+    "Zergs!\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W.......................W\n" +
     "W..P......P.........P...W\n" +
-    "W.....L.........P.......W\n" +
-    "W.....................LLW\n" +
-    "W........WWWWWW.......LLW\n" +
-    "W.....................LLW\n" +
+    "W.....L.................W\n" +
+    "W...P.................LLW\n" +
+    "W........WWWWWW....P..LLW\n" +
+    "W.....P..P....P.......LLW\n" +
     "W...P.......K.....P..LLLW\n" +
-    "W...................LLL.W\n" +
-    "W........WWWWWW....LL...W\n" +
+    "W............P......LLL.W\n" +
+    "W...P....WWWWWW....LL...W\n" +
     "W................LLL....W\n" +
-    "W.....L........LLLL.....W\n" +
+    "W.....L.....P..LLLL.....W\n" +
     "W.......................W\n" +
     "W........P..............W\n" +
-    "WL......................W\n" +
+    "WL.............P........W\n" +
     "WLL.WWWW.........WWWW...W\n" +
     "W..LW...............W...W\n" +
     "W..LW......I........W...W\n" +
@@ -169,6 +177,7 @@ public static class Levels
 
         //Divide and conquer Разделяй и властвуй
     public static string level9 =
+    "Stairway to hell\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W......................................W\n" +
     "W..............BB......................W\n" +
@@ -184,6 +193,7 @@ public static class Levels
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
     public static string level10= 
+    "Kings Palace\n" +
     "WWWWWWWWWWWWWWWWWWWWWWWWWWW\n" +
     "W.............Q...........W\n" +
     "W.........................W\n" +

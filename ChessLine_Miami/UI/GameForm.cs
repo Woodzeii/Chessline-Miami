@@ -20,8 +20,10 @@ public partial class GameForm : Form, IGameView
     public MenuViewer MenuViewer { get; } 
     
     private GamePresenter _gamePresenter;
-     Game _game { get; set; } 
+     Game _game { get; set; }
     private bool _isRPressed;
+    private DateTime _levelTitleVisibleUntil = DateTime.MinValue;
+    private const double LevelTitleDisplayDurationSeconds = 2.5;
     
     // private bool _isPaused;
     // private bool _isShowingTutorial;
@@ -79,6 +81,7 @@ public partial class GameForm : Form, IGameView
     public void SetGame(Game game)
     {
         _game = game;
+        _levelTitleVisibleUntil = DateTime.Now.AddSeconds(LevelTitleDisplayDurationSeconds);
         UpdateCameraOffset();
     }
 
@@ -95,6 +98,9 @@ public partial class GameForm : Form, IGameView
         }
 
         if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial || MenuViewer.IsShowingLevelComplete || MenuViewer.IsShowingLevelSelection)
+            return;
+
+        if (_levelTitleVisibleUntil > DateTime.Now)
             return;
 
         if (e.KeyCode == Keys.R)
@@ -116,6 +122,9 @@ public partial class GameForm : Form, IGameView
     private void GameForm_MouseMove(object sender, MouseEventArgs e)
     {
         if (MenuViewer.IsShowingMainMenu || MenuViewer.IsPaused || MenuViewer.IsShowingTutorial || MenuViewer.IsShowingLevelComplete || MenuViewer.IsShowingLevelSelection)
+            return;
+
+        if (_levelTitleVisibleUntil > DateTime.Now)
             return;
 
         if (_gamePresenter != null && _game?.Player != null)
@@ -256,6 +265,11 @@ public partial class GameForm : Form, IGameView
             return;
         }
 
+        if (_levelTitleVisibleUntil > DateTime.Now)
+        {
+            return;
+        }
+
         if (MenuViewer.IsShowingTutorial)
         {
             MenuViewer.TutorialImageIndex = (MenuViewer.TutorialImageIndex + 1) % 2;
@@ -287,6 +301,11 @@ public partial class GameForm : Form, IGameView
         {
             MenuViewer.IsShowingTutorial = true;
             MenuViewer.TutorialImageIndex = 0;
+            return;
+        }
+
+        if (_levelTitleVisibleUntil > DateTime.Now)
+        {
             return;
         }
 
@@ -390,6 +409,26 @@ public partial class GameForm : Form, IGameView
         {
             MenuViewer.DrawPauseMenu(g, this);
         }
+
+        // Название левелочка
+        if (_levelTitleVisibleUntil > DateTime.Now && _game?.Level != null)
+        {
+            DrawLevelTitle(g);
+        }
+    }
+
+    private void DrawLevelTitle(Graphics g)
+    {
+        var title = _game.Level.Name;
+        using var titleFont = new Font("Segoe UI", 32, FontStyle.Bold);
+        var textSize = g.MeasureString(title, titleFont);
+        var x = (ClientSize.Width - textSize.Width) / 2f;
+        var y = (ClientSize.Height - textSize.Height) / 2f;
+
+        using var backgroundBrush = new SolidBrush(Color.FromArgb(180, 0, 0, 0));
+        var padding = 20;
+        g.FillRectangle(backgroundBrush, x - padding, y - padding, textSize.Width + padding * 2, textSize.Height + padding * 2);
+        g.DrawString(title, titleFont, Brushes.White, x, y);
     }
 
     public void OnLevelComplete()

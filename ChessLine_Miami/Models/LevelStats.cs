@@ -20,7 +20,7 @@ public class LevelStats
     public void CalculateRating()
     {
         // Базовая оценка из времени
-        double timeRating = 5.0 - (TimeSeconds / 60.0); // За каждую минуту -1 звёзда
+        double timeRating = 5.0 - (TimeSeconds / 60); // За каждую минуту -1 звёзда
         timeRating = Math.Max(1, Math.Min(5, timeRating)); // от 1 до 5
 
         // Бонус за комбо

@@ -12,19 +12,8 @@ static class Program
 {
     private static int currentLevelIndex = 0;
 
-    private static readonly List<Level> levels = new List<Level>
-    {
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[0].Split('\n').Where(s => s.Length > 0).ToArray(), "StartLevel"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[1].Split('\n').Where(s => s.Length > 0).ToArray(), "Level2"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[2].Split('\n').Where(s => s.Length > 0).ToArray(), "Level3"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[3].Split('\n').Where(s => s.Length > 0).ToArray(), "Level4"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[4].Split('\n').Where(s => s.Length > 0).ToArray(), "Level5"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[5].Split('\n').Where(s => s.Length > 0).ToArray(), "level6"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[6].Split('\n').Where(s => s.Length > 0).ToArray(), "Level7"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[7].Split('\n').Where(s => s.Length > 0).ToArray(), "Level8"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[8].Split('\n').Where(s => s.Length > 0).ToArray(), "Level9"),
-        LevelGenerator.LoadFromStringArray(Levels.AllLevels[9].Split('\n').Where(s => s.Length > 0).ToArray(), "Level10"),
-    };
+    private static readonly List<Level> levels = new List<Level>();
+    
 
     static GameForm Form;
     public static PlayerProgress PlayerProgress { get; set; }
@@ -36,12 +25,17 @@ static class Program
     [STAThread]
     static void Main()
     {
+        for (int i=0; i<Levels.AllLevels.Length; i++)
+    {
+        levels.Add(LevelGenerator.LoadFromStringArray(Levels.AllLevels[i].Split('\n').Where(s => s.Length > 0).ToArray()));
+    }
+
         ApplicationConfiguration.Initialize();
         
         // Загружаем прогресс игрока
         PlayerProgress = PlayerProgress.LoadProgress();
-        // Инициализируем прогресс с пустыми именами уровней — пользователь задаст их отдельно
-        PlayerProgress.InitializeLevels(new List<string> { "Basis", "Streets", "Warehouse", "Jailed", "Beasts", "Mongolians", "Castle of Lava", "Zergs!", "Stairway to hell", "Kings Palace" });
+        // Инициализируем прогресс реальными именами уровней из определения уровней
+        PlayerProgress.InitializeLevels(levels.Select(l => l.Name).ToList());
         SFX.PlayerProgress = PlayerProgress;
         
         // Стартовая музыка главного меню

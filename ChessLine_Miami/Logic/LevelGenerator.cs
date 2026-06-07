@@ -1,24 +1,46 @@
 ﻿using ChessLine_Miami.Models;
+using System.Linq;
 namespace ChessLine_Miami.Logic;
 
 public class LevelGenerator
 {
-    public static Level LoadFromStringArray(string[] mapLines, string levelName = "Level")
+    public static Level LoadFromStringArray(string[] mapLines, string? levelName = null)
     {
+        var lines = mapLines.Where(s => s.Length > 0).ToList();
+        if (lines.Count == 0)
+            throw new ArgumentException("Level data is empty.", nameof(mapLines));
+
+        var validMapChars = new HashSet<char>("WLIPKBQR.");
+        var firstLineIsMap = lines[0].All(ch => validMapChars.Contains(ch));
+
+        if (!firstLineIsMap)
+        {
+            if (levelName == null)
+                levelName = lines[0];
+            lines = lines.Skip(1).ToList();
+        }
+        else if (levelName == null)
+        {
+            levelName = "Level";
+        }
+
+        if (lines.Count == 0)
+            throw new ArgumentException("Level map is missing after the title line.", nameof(mapLines));
+
         var walls = new HashSet<Point>();
         var lava = new HashSet<Point>();
         var enemies = new List<Enemy>();
         Point player = new Point(-1, -1); // Инициализируем, чтобы избежать ошибки компиляции
 
-        int height = mapLines.Length;
-        int width = mapLines[0].Length;
+        int height = lines.Count;
+        int width = lines[0].Length;
         Size room = new Size(width, height);
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                char symbol = mapLines[y][x];
+                char symbol = lines[y][x];
                 Point pos = new Point(x, y);
 
                 switch (symbol)
@@ -42,7 +64,7 @@ public class LevelGenerator
             }
         }
 
-        return new Level(levelName, room, walls, lava, player, enemies, mapLines);
+        return new Level(levelName, room, walls, lava, player, enemies, lines.ToArray());
     }
 
     public SectorType[,] CreateField(Level level)
