@@ -393,7 +393,7 @@ public partial class GameForm : Form, IGameView
             PlayerViewer.DrawAttackPreview(g, _game.Player, CameraOffset);
 
         // Draw tutorial button for first level
-        if (_game?.Level?.Name == "StartLevel")
+        if (_game?.Level?.Name == "Basis")
         {
             MenuViewer.DrawTutorialButton(g, _game, this);
         }
