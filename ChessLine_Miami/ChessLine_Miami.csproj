@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
+        <ApplicationIcon>UI\Photo\chessline.ico</ApplicationIcon> 
 	<UseWPF>true</UseWPF>
     </PropertyGroup>
 
@@ -13,6 +14,8 @@
       <Folder Include="UI\" />
       <Folder Include="UI\Photo\guide\" />
     </ItemGroup>
+
+     
 
     <ItemGroup>
       <None Update="UI\Photo\Lava.jpg">
